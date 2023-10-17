@@ -1,6 +1,6 @@
 {
-  "homepage": "http://www.lila.finance/",
-  "name": "release",
+  "homepage": "http://staging.lila.finance/",
+  "name": "staging",
   "private": true,
   "version": "0.0.0",
   "type": "module",
