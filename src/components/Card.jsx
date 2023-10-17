@@ -425,7 +425,7 @@ const fetchRate = async () => {
       {/* Title */}
       <div className="px-6 py-6 border-b border-b-themeColor text-center border-l-4 border-r-4 border-themeColor">
         <p className="text-base leading-none">         
-        DAI AAVE {pool[7]} Day
+        Sepolia DAI AAVE {pool[7] < 1 ? (pool[7]*24*60) + ` Minutes` : pool[7] + ` Day`} 
         </p>
       </div>
       {/* Toggle Categories */}

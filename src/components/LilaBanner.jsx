@@ -16,7 +16,7 @@ const LilaBanner = () => {
       {/* Subheading and button */}
       <div className="text-center mt-4 mb-20 lg:mb-40">
         <h1 className="text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl text-black font-medium">
-          Fixed Rate Swaps
+          TESTNET
         </h1>
 
         {/* button */}
