@@ -3,24 +3,20 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      screens: {
-        "3xl": "1850px",
-      },
       colors: {
-        themeColor: "#FFC9C9",
-        buttonText: "#F6A1A1",
-        lineBreakColor: "#FFE6E6",
-        secondaryBG: "#FCFCFC",
-        labelColor: "#8E8E8E",
-        buttonBG: "#EAEBEF",
-        textRed: "#FA2E2E",
-        claimBtn: "#C8C7C7",
-      },
-      dropShadow: {
-        buttonShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+        primaryBg: "#333745",
+        primaryBgDark: "#333745",
+        primaryColor: "#FFC9C9",
+        primaryColorDark: "#ba8f8f",
       },
       borderRadius: {
-        cardRadius: "30px",
+        barRadius: "50px",
+      },
+      boxShadow: {
+        barShadow:
+          "0px 4px 5px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset",
+        rowShadow:
+          "0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25);",
       },
     },
   },
