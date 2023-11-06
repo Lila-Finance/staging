@@ -34,30 +34,6 @@ const Navbar = () => {
 
       {/* right side */}
       <div>
-        {/* {connectWallet === true ? (
-          <div className="flex items-center gap-9">
-            <Link to="/balances">
-              <div className="bg-primaryColor w-12 h-[45px] rounded-full flex items-center justify-center text-xl cursor-pointer">
-                A
-              </div>
-            </Link>
-
-            <Link to="/balances">
-              <div className="bg-primaryColor w-12 h-[45px] rounded-full flex items-center justify-center text-xl cursor-pointer">
-                W
-              </div>
-            </Link>
-          </div>
-        ) : (
-            <button
-            className="bg-primaryColor pt-[0.35vw] pb-[0.5vw] px-[2.25vw] 
-                      rounded-barRadius text-[1vw] flex items-center 
-                      justify-center hover:bg-primaryColorDark duration-200"
-            onClick={() => setConnectWallet(true)}
-          >
-            Connect Wallet
-          </button>
-        )} */}
         <ConnectButton.Custom>
           {({
             account,
@@ -120,7 +96,7 @@ const Navbar = () => {
                         onClick={openChainModal}
                         style={{ display: "flex", alignItems: "center" }}
                         type="button"
-                        className="bg-primaryColor w-12 h-[6vh] rounded-lg flex items-center justify-center text-xl cursor-pointer"
+                        className="w-[5vh] h-[5vh] rounded-lg flex items-center justify-center text-xl cursor-pointer"
                       >
                         {chain.hasIcon && (
                           <div
@@ -146,7 +122,7 @@ const Navbar = () => {
                       <button
                         onClick={openAccountModal}
                         type="button"
-                        className="bg-primaryColor w-12 h-[6vh] rounded-lg flex items-center justify-center text-xl cursor-pointer"
+                        className="w-[5vh] h-[5vh] rounded-lg flex items-center justify-center text-xl cursor-pointer"
                       >
                         <img src="./images/walletico.png" alt="nav__logo" class="w-[2.5vw] h-[4vh]"/>
                       </button>
