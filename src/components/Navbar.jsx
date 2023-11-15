@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import  Overlay  from './Overlay';
 
-const Navbar = () => {
-  const [connectWallet, setConnectWallet] = useState(false);
-
-  return (
-    <div className="bg-primaryBgDark sticky top-0 z-50">
+const Navbar = ({setNetwork, showPopup}) => {
     
+  
+  return (
+    // <div className={`mx-20 ${showPopup ? "fixed inset-0 bg-white bg-opacity-40" : ""}`}></div>
+    <div className=
+    {`bg-primaryBgDark sticky top-0 z-50 ${showPopup ? "fixed inset-0 bg-white bg-opacity-10" : ""}`}>
+        
+        {/* if showPopup is true then add the following css fixed inset-0 bg-white bg-opacity-40 */}
         <div className="mx-20">
     <nav className="flex items-center justify-between py-6 md:flex-row flex-col gap-y-8
      w-11/12" 
@@ -15,7 +19,7 @@ const Navbar = () => {
       {/* left side */}
       <div className="flex items-center gap-8 md:gap-16 md:flex-row flex-col">
         <Link to="/">
-          <img src="./images/logo-2.svg" alt="nav__logo" class="w-[16vw] h-[8vh]"/>
+          <img src="./images/logo-2.svg" alt="nav__logo" className="w-[16vw] h-[8vh]"/>
         </Link>
 
         {/* links */}
@@ -51,7 +55,10 @@ const Navbar = () => {
               chain &&
               (!authenticationStatus ||
                 authenticationStatus === "authenticated");
-
+                useEffect(() => {
+                    setNetwork(chain.name);
+                },[]);
+                
             return (
               <div
                 {...(!ready && {
@@ -83,9 +90,11 @@ const Navbar = () => {
                       <button
                         onClick={openChainModal}
                         type="button"
-                        className="bg-primaryColor px-[1vw] pt-[0.35vw] pb-[0.5vw] rounded-full flex items-center justify-center text-xl cursor-pointer"
+                        className="bg-primaryColor pt-[0.35vw] pb-[0.5vw] px-[2.25vw] 
+                      rounded-barRadius text-[1vw] flex items-center 
+                      justify-center hover:bg-primaryColorDark duration-200"
                       >
-                        ?
+                        Wrong Network
                       </button>
                     );
                   }
@@ -124,7 +133,7 @@ const Navbar = () => {
                         type="button"
                         className="w-[5vh] h-[5vh] rounded-lg flex items-center justify-center text-xl cursor-pointer"
                       >
-                        <img src="./images/walletico.png" alt="nav__logo" class="w-[2.5vw] h-[4vh]"/>
+                        <img src="./images/walletico.png" alt="nav__logo" className="w-[2.5vw] h-[4vh]"/>
                       </button>
                     </div>
                   );

@@ -16,8 +16,10 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [arbitrum],
+    [arbitrum, optimism, sepolia],
     [alchemyProvider({ apiKey: 'Wj9xJWTAnxnob5ftBVI3OiQ-zuCZwNrG' }),
+    alchemyProvider({ apiKey: 'BArBGs7sg5JFmW52LayXKEZ1ftNtFdgj' }),
+    alchemyProvider({ apiKey: '2s-1F2BiWb0o7mA2LieeKX4j46A0YhM3' }),
           publicProvider()]
   );
   const { connectors } = getDefaultWallets({

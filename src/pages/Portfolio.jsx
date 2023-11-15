@@ -1,4 +1,5 @@
 import Navbar from "../components/Navbar";
+import { useState } from "react";
 
 const Portfolio = () => {
   const dataTableHeading = ["Asset", "Protocol", "APY", "Maturity", "Principal"];
@@ -69,10 +70,10 @@ const Portfolio = () => {
         principal: "23 000",
       },
   ];
-
+  const [network, setNetwork] = useState("None");
   return (
     <div className="min-h-screen bg-primaryBg relative">
-      <Navbar />
+      <Navbar setNetwork={setNetwork} />
       <div className="container mx-auto w-11/12">
 
 
