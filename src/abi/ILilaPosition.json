@@ -147,33 +147,43 @@
         {
           "components": [
             {
-              "internalType": "contract IERC20",
-              "name": "asset",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "rate_time",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "duration_between_payments",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "payouts_plus_principal_payed_out",
-              "type": "uint256"
-            },
-            {
               "internalType": "uint256",
               "name": "deposit_amount",
               "type": "uint256"
             },
             {
-              "internalType": "uint32",
+              "internalType": "uint256",
+              "name": "max_deposit_amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
               "name": "strategy",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "asset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint64",
+              "name": "duration_between_payments",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint64",
+              "name": "rate_time",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint32",
+              "name": "init_payouts",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "payouts_payed_out",
               "type": "uint32"
             }
           ],
@@ -238,33 +248,43 @@
         {
           "components": [
             {
-              "internalType": "contract IERC20",
-              "name": "asset",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "rate_time",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "duration_between_payments",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "payouts_plus_principal_payed_out",
-              "type": "uint256"
-            },
-            {
               "internalType": "uint256",
               "name": "deposit_amount",
               "type": "uint256"
             },
             {
-              "internalType": "uint32",
+              "internalType": "uint256",
+              "name": "max_deposit_amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
               "name": "strategy",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "asset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint64",
+              "name": "duration_between_payments",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint64",
+              "name": "rate_time",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint32",
+              "name": "init_payouts",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "payouts_payed_out",
               "type": "uint32"
             }
           ],

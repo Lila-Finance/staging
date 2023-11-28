@@ -55,9 +55,9 @@ const Navbar = ({setNetwork, showPopup}) => {
               chain &&
               (!authenticationStatus ||
                 authenticationStatus === "authenticated");
-                useEffect(() => {
-                    setNetwork(chain.name);
-                },[]);
+            useEffect(() => {
+                setNetwork(chain?.name);
+            },[chain, connected]);
                 
             return (
               <div

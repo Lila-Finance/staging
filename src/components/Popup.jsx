@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { ethers } from 'ethers';
 import BigNumber from "bignumber.js";
-import erc20address from "../localdata/erc20address.json";
+import assets from "../localdata/assets.json";
 // import { signTransaction } from "viem/_types/accounts/utils/signTransaction";
 import { signTypedData } from '@wagmi/core'
 import address from "../addresses/address.json";
 import IERC20Permit from "../abi/IERC20Permit.json";
 import ILilaPoolsProvider from "../abi/ILilaPoolsProvider.json";
+import ILilaPosition from "../abi/ILilaPosition.json";
 
 import {useContractWrite, useContractEvent} from "wagmi";
 
-const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient }) => {
+const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient, setShowConfirmPopup, network }) => {
   
+  const [betterState, setBetterState] = useState(network().toLowerCase());
   const [userBalance, setUserBalance] = useState("0");
   const [formattedBalance, setFormattedBalance] = useState("0");
   
@@ -44,9 +46,6 @@ const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient 
   };
 
   const [depositArgs, setDepositArgs] = useState([]);
-  const awaitsetDepositArgs = async (value) => {
-    setDepositArgs(value);
-  }
   const {
     data,
     write: deposit,
@@ -58,102 +57,129 @@ const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient 
         args: depositArgs,
     });
 
+  const [depositString, setDepositString] = useState("");
+
   const signTransaction = async () => {
-    console.log("Signing Transaction!");
+    if(!selectedPool){
+        return;
+    }
+    
     setSignBool(false);
     setSigningBool(true);
-    let allowance = 1;
-    console.log("Allowance: " + allowance);
-    if(allowance < 2){
-        console.log("Requesting allowance: " + 2);
-        const tokenAddress = "0xFF34B3d4Aee8ddCd6F9AFFFB6Fe49bD371b8a357";
-        
-        const domain = {
-            name: "Dai Stablecoin",
-            version: "2",
-            chainId: 11155111,
-            verifyingContract: tokenAddress,
-          }
-        
-        const types = {
-            Permit: [
-                {
-                  "name": "owner",
-                  "type": "address"
-                },
-                {
-                  "name": "spender",
-                  "type": "address"
-                },
-                {
-                  "name": "value",
-                  "type": "uint256"
-                },
-                {
-                  "name": "nonce",
-                  "type": "uint256"
-                },
-                {
-                  "name": "deadline",
-                  "type": "uint256"
-                }
-              ]
-        }
-        const time = new BigNumber(((await publicClient.getBlock("latest")).timestamp));
-        const expiry = BigNumber.sum(time, new BigNumber(1000));
-        
-        const nonce = (await publicClient.readContract({
-                        address: tokenAddress,
-                        abi: IERC20Permit.abi,
-                        functionName: "nonces",
-                        args: [userAddress],
-                      })).toString();
+    
+    const pools = await publicClient.readContract({
+        address: address.pools_provider,
+        abi: ILilaPoolsProvider.abi,
+        functionName: "getOpenPools",
+        args: [],
+      });
+    if(!pools) return;
+    if(!pools[selectedPool[3]]) return;
+    if(depositString == "") return;
+    const decimals = selectedPool[1] == "DAI" ? 18 : 6;
+    const amount = ethers.parseUnits(depositString, decimals);
+    // depositString
 
-        const message = {
-            owner: userAddress,
-            spender: address.pools_provider,
-            value: 10,
-            nonce: Number(nonce),
-            deadline: expiry.toString()
-          }
-        
-        const signature = await signTypedData({
+    const tokenAddress = pools[selectedPool[3]]['asset'];
+
+    const expiry = Math.trunc((Date.now() + 300 * 1000) / 1000)
+    const nonce = (await publicClient.readContract({
+        address: tokenAddress,
+        abi: IERC20Permit.abi,
+        functionName: "nonces",
+        args: [userAddress],
+      })).toString();
+    
+
+    const message = {
+        owner: userAddress,
+        spender: address.pools_provider,
+        value: amount,
+        nonce: nonce,
+        deadline: expiry
+    };
+    const types = {
+        EIP712Domain: [
+        {
+            name: "name",
+            type: "string",
+        },
+        {
+            name: "version",
+            type: "string",
+        },
+        {
+            name: "chainId",
+            type: "uint256",
+        },
+        {
+            name: "verifyingContract",
+            type: "address",
+        },
+        ],
+        Permit: [
+        { //Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline
+            name: "owner",
+            type: "address",
+        },
+        {
+            name: "spender",
+            type: "address",
+        },
+        {
+            name: "value",
+            type: "uint256",
+        },
+        {
+            name: "nonce",
+            type: "uint256",
+        },
+        {
+            name: "deadline",
+            type: "uint256",
+        }
+        ],
+    };
+    const domain = {
+        name: selectedPool[1],
+        version: "1",
+        chainId: 11155111,
+        verifyingContract: tokenAddress,
+    };
+    const signature = await signTypedData({
         domain,
         message,
         primaryType: 'Permit',
         types,
-        })
+      });
+    setSigningBool(false);
+    setDepositBool(true);
 
-        console.log(signature);
-        const pureSig = signature.replace("0x", "")
-
-        const r = "0x"+pureSig.substring(0, 64);
-        const s = "0x"+pureSig.substring(64, 128);
-        const v = "0x"+pureSig.substring(128, 130);
-        
-        console.log(`r: 0x${r.toString('hex')},\ns: 0x${s.toString('hex')},\nv: ${v}`) 
-        
-        const amount = 10;
-        let args = [amount, 0, expiry.toString(), v, r, s];
-        console.log(args);
-        setDepositArgs(args);
-        setSigningBool(false);
-        setDepositBool(true);
-    }
+    const r = signature.substring(0, 66);
+    const s = "0x" + signature.substring(66, 130);
+    const v = Number("0x" + signature.substring(130, 132));
+    
+    const value = [amount, selectedPool[3], expiry, v, r, s];
+    
+    setDepositArgs(value);
   }
 
   const depositTransaction = async () => {
     if(depositArgs != []){
+        setDepositBool(false);
+        setDepositingBool(true);
         deposit();
+        
     }
   }
 
   useEffect(() => {
+    // console.log(selectedPool)
     const fetchBalance = async () => {
       try {
         // Replace this with your actual function to get the balance
-        console.log(erc20address['sepolia'][safeString(1).toString()]);
-        const balance = await getBalance(erc20address['sepolia'][safeString(1).toString()]);
+        // console.log(erc20address['sepolia'][safeString(1).toString()]);
+        const balance = await getBalance(assets[network().toLowerCase()][safeString(1).toString()]);
         const formattedBalance = formatBalance(balance, safeString(1).toString());
         setFormattedBalance(formattedBalance);
         setUserBalance(balance);
@@ -181,6 +207,28 @@ const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient 
     eventName: 'Deposit',
     listener(log) {
         console.log(log);
+        const run = async () => {
+            if(!!log && !!log[0] && !!log[0].args && log[0].args["who"] == userAddress){
+                const posiitonID = log[0].args["tokenID"];
+                console.log(posiitonID)
+                const positionPool = await publicClient.readContract({
+                    address: address.lila_position,
+                    abi: ILilaPosition.abi,
+                    functionName: "getPool",
+                    args: [posiitonID],
+                });
+                const assert = positionPool["asset"];
+                const token = assets[assert.toString()];
+                
+                const decimals = token == "DAI" ? 18 : 6;
+                const amount = ethers.formatUnits(log[0].args["amount"].toString(), decimals);
+                
+                setShowConfirmPopup(amount, token);
+                setSignBool(true);
+                setDepositingBool(false);
+            }
+        }
+        run();
     },
     });
   return (
@@ -209,10 +257,11 @@ const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient 
 
         {/* right side */}
         <div className="w-full">
-          <input
-            type="number"
-            className="bg-transparent outline-none w-full p-2 text-end border-2 border-primaryColor rounded-[15px] text-white font-medium"
-          />
+            <input
+                type="number"
+                className="bg-transparent outline-none w-full p-2 text-end border-2 border-primaryColor rounded-[15px] text-white font-medium"
+                onChange={(e) => setDepositString(e.target.value)}
+            />
         </div>
       </div>
       {/* button */}
@@ -242,6 +291,16 @@ const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient 
             hover:bg-primaryBg hover:border-2 hover:border-primaryColor hover:text-white">
                 <div className="flex items-center justify-center gap-2">
                 <p>Deposit</p>
+                </div>
+            </button>
+        ) : null}
+
+        {depositingBool === true ? (
+            <button
+            className="text-lg font-medium px-16 py-1 rounded-[30px] bg-primaryBg border-2 border-primaryColor text-white">
+              <div className="flex items-center justify-center gap-2">
+                  <i className="fa-solid fa-spinner fa-spin"></i>
+                  <p>Depositing</p>
                 </div>
             </button>
         ) : null}

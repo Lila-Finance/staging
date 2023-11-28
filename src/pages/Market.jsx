@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import Navbar from "../components/Navbar";
 import Popup from "../components/Popup";
+import ConfirmationPopup from '../components/ConfirmationPopup';
 import Overlay from "../components/Overlay";
-import addresses from "../addresses/address.json";
+import address from "../addresses/address.json";
 import mapping from "../localdata/mapping.json";
 
 import { useAccount, usePublicClient} from "wagmi";
 import { ethers } from "ethers";
 
 import IERC20 from "../abi/IERC20.json";
+import IProxy from "../abi/IProxy.json";
 import ILilaPoolsProvider from "../abi/ILilaPoolsProvider.json";
 
 const Market = ({ nextPageRef }) => {
@@ -28,18 +30,14 @@ const Market = ({ nextPageRef }) => {
 
     return ethers.formatEther(0);
   };
-
+  const getNetwork = () => {
+    return network;
+  }
   const maturityDuration = ["1", "3", "6"];
-const [activeMaturities, setActiveMaturities] = useState([0, 1, 2]);
+const [activeMaturities, setActiveMaturities] = useState(0);
 const toggleMaturity = (index) => {
-    if (activeMaturities.includes(index)) {
-      setActiveMaturities(activeMaturities.filter(item => item !== index));
-    } else {
-      setActiveMaturities([...activeMaturities, index]);
-    }
+    setActiveMaturities(index);
   };
-
-
 
   const assetData = ["All", "USDT", "DAI", "USDC"];
   const [selectedAsset, setselectedAsset] = useState("All");
@@ -52,6 +50,15 @@ const toggleMaturity = (index) => {
 
   // popup
   const [showPopup, setShowPopup] = useState(false);
+  const [showConfirmPopup , setShowConfirmPopup]  = useState(false);
+  const [amount, setAmount] = useState("");
+  const [token, setToken] = useState("");
+  const setConfirmPopup = (amount, token) => {
+    setAmount(amount);
+    setToken(token);
+    setShowPopup(false);
+    setShowConfirmPopup(true);
+  }
 
   const openPopup = (id_shown) => {
     setShowPopup(true);
@@ -66,10 +73,14 @@ const toggleMaturity = (index) => {
   const [pools, setPools] = useState([]);
 
   const [shownPools, setShownPools] = useState([]);
+
+  const [sortAPY, setSortAPY] = useState(0); // 0 is n/a 1 is up 2 is down
+  const [sortTVL, setSortTVL] = useState(0); // 0 is n/a 1 is up 2 is down
+  
   
 
 useEffect(() => {
-    if(network != "None"){
+    if(network != "None" && network != undefined){
     setMessage(network +" Markets")
     let map = mapping[network.toLowerCase()];
     // console.log(map);
@@ -81,40 +92,139 @@ useEffect(() => {
           for (const [assetKey, timeframes] of Object.entries(assets)) {
             // Iterate through each timeframe (like "1m", "3m", "6m")
             for (const [timeframe, value] of Object.entries(timeframes)) {
-              listOfLists.push([topLevelKey, assetKey, timeframe, value['index'], value['rate']]);
+              listOfLists.push([topLevelKey, assetKey, timeframe, value['index'], value['rate'], 0]);
             }
           }
         }
       
         return listOfLists;
       }
-      const list = convertMapToListOfLists(map);
-      setPools(list);
+      const list = convertMapToListOfLists(map);  
+    //   setPools(list);
+    //   console.log(list);
+      const getTVLS = async (new_list) => {
+        const networkpools = await publicClient.readContract({
+            address: address.pools_provider,
+            abi: ILilaPoolsProvider.abi,
+            functionName: "getOpenPools",
+            args: [],
+        });
+        const requests = list.map(async (item, index) => {
+            const pooln = networkpools[item[3]];
+            if (pooln) {
+              const proxy = pooln['strategy'];
+              try {
+                const BALANCE = await publicClient.readContract({
+                  address: proxy,
+                  abi: IProxy.abi,
+                  functionName: "balance",
+                  args: [],
+                });
+                const decimal = item[1] === "DAI" ? 18 : 6;
+                return ethers.formatUnits(BALANCE, decimal);
+              } catch (error) {
+                console.error(`Error fetching data for pool at index ${index}:`, error);
+                return item[5]; // return existing value in case of error
+              }
+            }
+            return item[5]; // return existing value if pooln is undefined
+          });
+        
+        const results = await Promise.all(requests);
+        const updatedList = list.map((item, index) => {
+            item[5] = results[index];
+            return item;
+          });
+        
+        setPools(updatedList);
+        // for(let i = 0; i < new_list.length; i++){
+        //     // const tokenAddress = pools[selectedPool[3]]['asset'];
+        //     const pooln = networkpools[new_list[i][3]];
+        //     if(pooln != undefined){
+        //         const proxy = pooln['strategy'];
+        //         // console.log(proxy);
+
+        //         const BALANCE = await publicClient.readContract({
+        //             address: proxy,
+        //             abi: IProxy.abi,
+        //             functionName: "balance",
+        //             args: [],
+        //         });
+        //         const decimal = new_list[i][1] == "DAI" ? 18 : 6;
+                
+        //         new_list[i][5] = (ethers.formatUnits(BALANCE, decimal));
+        //     }
+        // }
+        // console.log(new_list);
+        // setPools(new_list);
+    }
+        setPools(list);
+        getTVLS(list);
+    
     }
   }, [network]);
+  
 
   useEffect(() => {
-    // console.log(pools);
+
     
-    let activeMaturitiesDuration = activeMaturities.map(index => maturityDuration[index] + "m");
-    let filteredPools = pools.filter(pool => activeMaturitiesDuration.includes(pool[2]));
+    let activeMaturitiesDuration =  maturityDuration[activeMaturities] + "m";
+    let filteredPools = pools.filter(pool => activeMaturitiesDuration == pool[2]);
 
     let asset = selectedAsset;  
     let nfilteredPools = asset == "All" ? filteredPools : filteredPools.filter(pool => pool[1] === asset);
+
+    //filter by tvl or apy
+    //sortTVL == 1
+    if(sortTVL > sortAPY){
+        if(sortTVL != 0) {
+            nfilteredPools.sort((a, b) => {
+            if (sortTVL === 1) {
+            return a[5] - b[5];
+            }
+            else if (sortTVL === 2) {
+            return b[5] - a[5];
+            }
+        })
+        }
+    }
+    if(sortAPY != 0) {
+        nfilteredPools.sort((a, b) => {
+        if (sortAPY === 1) {
+          return a[4] - b[4];
+        }
+        else if (sortAPY === 2) {
+          return b[4] - a[4];
+        }
+      })
+    }
+    if(sortTVL <= sortAPY){
+        if(sortTVL != 0) {
+            nfilteredPools.sort((a, b) => {
+            if (sortTVL === 1) {
+            return a[5] - b[5];
+            }
+            else if (sortTVL === 2) {
+            return b[5] - a[5];
+            }
+        })
+        }
+    }
+    
 
     setShownPools(nfilteredPools.slice(0, 5));
     
     let page_count = Math.ceil(nfilteredPools.length / 5);
     setPagination(Array.from({ length: page_count }, (_, index) => (index + 1).toString()));
 
-    }, [pools, selectedAsset, activeMaturities]);
+    }, [pools, selectedAsset, activeMaturities, sortAPY, sortTVL]);
 
     useEffect(() => {
         // console.log(pools);
         
-        let activeMaturitiesDuration = activeMaturities.map(index => maturityDuration[index] + "m");
-        let filteredPools = pools.filter(pool => activeMaturitiesDuration.includes(pool[2]));
-
+        let activeMaturitiesDuration =  maturityDuration[activeMaturities] + "m";
+        let filteredPools = pools.filter(pool => activeMaturitiesDuration == pool[2]);
+    
         let asset = selectedAsset;  
         let nfilteredPools = asset == "All" ? filteredPools : filteredPools.filter(pool => pool[1] === asset);
         setShownPools(nfilteredPools.slice(5*activePagination, 5+5*activePagination));
@@ -126,14 +236,31 @@ useEffect(() => {
 
     //     }
     // }, [shownPools]);
-
+    const to3NumbersAndChar = (value) => {
+        const num = parseFloat(value);
+        // Define thresholds for K, M, B, etc.
+        const thresholds = [
+            { limit: 1_000_000_000, suffix: 'B' },
+            { limit: 1_000_000, suffix: 'M' },
+            { limit: 1_000, suffix: 'K' }
+        ];
+        // Check against each threshold
+        for (const { limit, suffix } of thresholds) {
+            if (num >= limit) {
+                // Format the number with 3 significant figures and add the suffix
+                return `${(num / limit).toFixed(2)}${suffix}`;
+            }
+        }
+        // If number is less than 1000, format it with 3 significant figures without suffix
+        return num.toFixed(2);
+    }
   const [selectedPool, setSelectedPool] = useState(0);
   return (
     <div
       ref={nextPageRef}
       className="relative bg-primaryBg min-h-screen lg:pb-0 pb-20"
     >
-        <Navbar setNetwork={setNetwork} showPopup={showPopup} />
+        <Navbar setNetwork={setNetwork} showPopup={showPopup||showConfirmPopup} />
       <div className="container mx-auto w-11/12 min-h-screen">
         <div className="mt-8">
             <p className="text-center text-2xl md:text-4xl text-white font-bold">
@@ -154,12 +281,12 @@ useEffect(() => {
                 <div
                     key={idx}
                     className={` ${
-                    activeMaturities.includes(idx) ? "bg-primaryColor" : ""
+                    activeMaturities == idx ? "bg-primaryColor" : ""
                     } w-8 h-8 rounded-full flex items-center justify-center cursor-pointer`}
                     onClick={() => toggleMaturity(idx)}>
                     <p
                     className={` ${
-                        activeMaturities.includes(idx) ? "text-primaryBg" : "text-white"
+                        activeMaturities == idx ? "text-primaryBg" : "text-white"
                     } text-sm`}>
                     {item}
                     </p>
@@ -223,9 +350,19 @@ useEffect(() => {
 
               <div className="w-4/12 flex items-center justify-end gap-2 px-5">
                 <p className="text-m text-white font-bold">APY</p>
-                <img src="./images/header-arrow.svg" alt="" />
-              </div>
-
+                <img 
+                    src="./images/header-arrow.svg" 
+                    alt="" 
+                    onClick={() => {
+                        setSortAPY(prevSortAPY => prevSortAPY < 0 ? (-prevSortAPY + 1) % 3 : (prevSortAPY + 1) % 3);
+                        if(sortTVL > 0) setSortTVL(prevSortTVL => -prevSortTVL)
+                    }} 
+                    style={{
+                        transform: sortAPY === 1 || sortAPY === -1 ? 'rotate(180deg)' : 'rotate(0deg)',
+                        opacity: sortAPY === 0 ? 0.5 : 1 
+                      }} 
+                />
+                </div>
               <div className="w-4/12 flex items-center justify-end gap-2 px-5">
                 <p className="text-m text-white font-bold">Maturity</p>
                 {/* <img src="./images/header-arrow.svg" alt="" /> */}
@@ -233,14 +370,25 @@ useEffect(() => {
 
               <div className="w-4/12 flex items-center justify-end gap-2 px-5">
                 <p className="text-m text-white font-bold">TVL</p>
-                <img src="./images/header-arrow.svg" alt="" />
+                <img 
+                    src="./images/header-arrow.svg" 
+                    alt="" 
+                    onClick={() => {
+                        setSortTVL(prevSortTVL => prevSortTVL < 0 ? (-prevSortTVL + 1) % 3 : (prevSortTVL + 1) % 3);
+                        if(sortAPY > 0) setSortAPY(prevSortAPY => -prevSortAPY)
+                    }} 
+                    style={{
+                        transform: sortTVL === 1 || sortTVL === -1  ? 'rotate(180deg)' : 'rotate(0deg)',
+                        opacity: sortTVL === 0 ? 0.5 : 1 
+                      }} 
+                />
               </div>
             </div>
 
             {/* contetn */}
             <div>
               {shownPools?.map((item, idx) => {
-                const [ protocol, asset, duration, id, rate  ] = item;
+                const [ protocol, asset, duration, id, rate, tvl ] = item;
 
                 return (
                   <div
@@ -269,7 +417,7 @@ useEffect(() => {
                     </div>
 
                     <div className="w-4/12 flex items-center justify-end gap-2 px-5">
-                      <p className="text-sm text-white font-medium">tvl</p>
+                      <p className="text-sm text-white font-medium">{to3NumbersAndChar(tvl)}</p>
                     </div>
                   </div>
                 );
@@ -303,9 +451,12 @@ useEffect(() => {
       </div>
       <div className="w-full h-[55px] bg-primaryColor mt-10"></div>
       <div className="w-full h-[55px]"></div>
-      {showPopup === true ? <Overlay closeFunc={closePopup} /> : null}
+      {(showPopup||showConfirmPopup) === true ? <Overlay closeFunc={closePopup} /> : null}
             <Popup showPopup={showPopup} getBalance={getUserBalance} selectedPool={pools[selectedPool]}
-            userAddress={userAddress} publicClient={publicClient}/>
+            userAddress={userAddress} publicClient={publicClient} setShowConfirmPopup={setConfirmPopup}
+            network={getNetwork}/>
+            <ConfirmationPopup showPopup={showConfirmPopup} setShowConfirmPopup={setShowConfirmPopup}
+            amount={amount} token={token}/>
     </div>
   );
 };

@@ -1,119 +1,119 @@
 {
     "sepolia": {
         "Aave": {
-                "DAI": {
-                    "1m": {
-                        "rate": 1.23,
-                        "index": 0
-                    },
-                    "3m": {
-                        "rate": 1.23,
-                        "index": 1
-                    },
-                    "6m": {
-                        "rate": 1.23,
-                        "index": 2
-                    }
-                },
-                "USDC": {
-                    "1m": {
-                        "rate": 1.23,
-                        "index": 3
-                    },
-                    "3m": {
-                        "rate": 1.23,
-                        "index": 4
-                    },
-                    "6m": {
-                        "rate": 1.23,
-                        "index": 5
-                    }
-                },
-                "USDT": {
-                    "1m": {
-                        "rate": 1.23,
-                        "index": 6
-                    },
-                    "3m": {
-                        "rate": 1.23,
-                        "index": 7
-                    },
-                    "6m": {
-                        "rate": 1.23,
-                        "index": 8
-                    }
-                },
-                "ETH": {
-                    "1m": {
-                        "rate": 1.23,
-                        "index": 9
-                    },
-                    "3m": {
-                        "rate": 1.23,
-                        "index": 10
-                    },
-                    "6m": {
-                        "rate": 1.23,
-                        "index": 11
-                    }
-                }
-            }
-        },
-    "arbitrum": {
-        "Aave": {
             "DAI": {
                 "1m": {
-                    "rate": 1.23,
+                    "rate": 5.24,
                     "index": 0
                 },
                 "3m": {
-                    "rate": 1.23,
+                    "rate": 5.04,
                     "index": 1
                 },
                 "6m": {
-                    "rate": 1.23,
+                    "rate": 3.54,
                     "index": 2
                 }
             },
             "USDC": {
                 "1m": {
-                    "rate": 1.23,
+                    "rate": 5.97,
                     "index": 3
                 },
                 "3m": {
-                    "rate": 1.23,
+                    "rate": 5.09,
                     "index": 4
                 },
                 "6m": {
-                    "rate": 1.23,
+                    "rate": 3.56,
                     "index": 5
                 }
             },
             "USDT": {
                 "1m": {
-                    "rate": 1.23,
+                    "rate": 4.69,
                     "index": 6
                 },
                 "3m": {
-                    "rate": 1.23,
+                    "rate": 4.09,
                     "index": 7
                 },
                 "6m": {
-                    "rate": 1.23,
+                    "rate": 3.86,
                     "index": 8
                 }
             },
             "ETH": {
                 "1m": {
-                    "rate": 1.23,
+                    "rate": 2.24,
                     "index": 9
                 },
                 "3m": {
-                    "rate": 1.23,
+                    "rate": 2.23,
                     "index": 10
                 },
                 "6m": {
-                    "rate": 1.23,
+                    "rate": 2.25,
+                    "index": 11
+                }
+            }
+        }
+    },
+    "arbitrum": {
+        "Aave": {
+            "DAI": {
+                "1m": {
+                    "rate": 5.24,
+                    "index": 0
+                },
+                "3m": {
+                    "rate": 5.04,
+                    "index": 1
+                },
+                "6m": {
+                    "rate": 3.54,
+                    "index": 2
+                }
+            },
+            "USDC": {
+                "1m": {
+                    "rate": 5.97,
+                    "index": 3
+                },
+                "3m": {
+                    "rate": 5.09,
+                    "index": 4
+                },
+                "6m": {
+                    "rate": 3.56,
+                    "index": 5
+                }
+            },
+            "USDT": {
+                "1m": {
+                    "rate": 4.69,
+                    "index": 6
+                },
+                "3m": {
+                    "rate": 4.09,
+                    "index": 7
+                },
+                "6m": {
+                    "rate": 3.86,
+                    "index": 8
+                }
+            },
+            "ETH": {
+                "1m": {
+                    "rate": 2.24,
+                    "index": 9
+                },
+                "3m": {
+                    "rate": 2.23,
+                    "index": 10
+                },
+                "6m": {
+                    "rate": 2.25,
                     "index": 11
                 }
             }
@@ -123,43 +123,43 @@
         "Aave": {
             "DAI": {
                 "1m": {
-                    "rate": 1.23,
+                    "rate": 3.62,
                     "index": 0
                 },
                 "3m": {
-                    "rate": 1.23,
+                    "rate": 3.09,
                     "index": 1
                 },
                 "6m": {
-                    "rate": 1.23,
+                    "rate": 2.42,
                     "index": 2
                 }
             },
             "USDC": {
                 "1m": {
-                    "rate": 1.23,
+                    "rate": 4.01,
                     "index": 3
                 },
                 "3m": {
-                    "rate": 1.23,
+                    "rate": 3.52,
                     "index": 4
                 },
                 "6m": {
-                    "rate": 1.23,
+                    "rate": 2.77,
                     "index": 5
                 }
             },
             "USDT": {
                 "1m": {
-                    "rate": 1.23,
+                    "rate": 4.79,
                     "index": 6
                 },
                 "3m": {
-                    "rate": 1.23,
+                    "rate": 3.45,
                     "index": 7
                 },
                 "6m": {
-                    "rate": 1.23,
+                    "rate": 3.62,
                     "index": 8
                 }
             },
@@ -180,4 +180,3 @@
         }
     }
 }
-  
