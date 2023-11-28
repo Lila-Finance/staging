@@ -13,10 +13,14 @@ import {useContractWrite, useContractEvent} from "wagmi";
 
 const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient, setShowConfirmPopup, network }) => {
   
-  const [betterState, setBetterState] = useState(network().toLowerCase());
+  const [betterState, setBetterState] = useState("");
   const [userBalance, setUserBalance] = useState("0");
   const [formattedBalance, setFormattedBalance] = useState("0");
-  
+  useEffect(() => {
+    if(network()){
+        setBetterState(network().toLowerCase());
+    }
+  }, [network()])
 //   console.log(selectedPool);
 
   const formatBalance = (balanceStr, token) => {
