@@ -197,7 +197,8 @@ const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient,
 
   const safeString = (first, second) =>{
     let l = selectedPool ? (selectedPool[first])  : " "; 
-    return second ? l[0] : l;
+    let result = l.length >= 3 ? l.substring(0, 2) : (l.length === 2 ? l.substring(0, 1) : "");
+    return second ? result : l;
   }
 
   const [signBool, setSignBool] = useState(true);
@@ -248,7 +249,16 @@ const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient,
         <p className="text-lg text-white font-medium">{safeString(1)}</p>
         <p className="text-lg text-white font-medium">{safeString(0)}</p>
         <p className="text-lg text-white font-medium">{safeString(4)}%</p>
-        <p className="text-lg text-white font-medium">{safeString(2,true)} Month</p>
+        <p className="text-lg text-white font-medium"> {safeString(2,true)} {network().toLowerCase() == "sepolia" ? "Minutes": "Months"}</p>
+      </div>
+
+      <div className="items-center justify-between py-5 border-b border-b-primaryColor">
+        <p className="text-lg text-white font-medium pb-2"> 
+        Payouts Every:  
+        {network().toLowerCase() == "sepolia" ? " 10 Minutes": " 1 Month"}</p>
+        <p className="text-lg text-white font-medium"> 
+        Payout Rate:  {Number(safeString(4))/Number(safeString(2,true)[0])}%
+        </p>
       </div>
 
       <div className="flex items-center justify-between gap-7 pt-5 pb-6 border-b border-b-primaryColor">
@@ -312,7 +322,9 @@ const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient,
       </div>
 
       <div className="absolute bottom-5 right-5">
-        <img src="./images/tooltip.svg" alt="" />
+        <a href="https://lila-finance.gitbook.io/lila-documentation/how-to-use-lila-finance/the-market">
+            <img src="./images/tooltip.svg" alt="Tooltip" />
+        </a>
       </div>
     </div>
   );

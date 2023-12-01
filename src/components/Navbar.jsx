@@ -31,7 +31,10 @@ const Navbar = ({setNetwork, showPopup}) => {
             <Link to={"/portfolio"}>Portfolio</Link>
           </li>
           <li>
-            <Link to={"/"}>Help</Link>
+            <Link to={"https://lila-finance.gitbook.io/lila-documentation/"}>Help</Link>
+          </li>
+          <li>
+            <Link to={"/facet"}>Facet</Link>
           </li>
         </ul>
       </div>

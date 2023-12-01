@@ -2,44 +2,44 @@
     "sepolia": {
         "Aave": {
             "DAI": {
-                "1m": {
-                    "rate": 5.24,
+                "10m": {
+                    "rate": 3,
                     "index": 0
                 },
-                "3m": {
-                    "rate": 5.04,
+                "30m": {
+                    "rate": 4.5,
                     "index": 1
                 },
-                "6m": {
-                    "rate": 3.54,
+                "60m": {
+                    "rate": 6,
                     "index": 2
                 }
             },
             "USDC": {
-                "1m": {
-                    "rate": 5.97,
+                "10m": {
+                    "rate": 6,
                     "index": 3
                 },
-                "3m": {
-                    "rate": 5.09,
+                "30m": {
+                    "rate": 3,
                     "index": 4
                 },
-                "6m": {
-                    "rate": 3.56,
+                "60m": {
+                    "rate": 4.5,
                     "index": 5
                 }
             },
             "USDT": {
-                "1m": {
-                    "rate": 4.69,
+                "10m": {
+                    "rate": 3,
                     "index": 6
                 },
-                "3m": {
-                    "rate": 4.09,
+                "30m": {
+                    "rate": 6,
                     "index": 7
                 },
-                "6m": {
-                    "rate": 3.86,
+                "60m": {
+                    "rate": 4.5,
                     "index": 8
                 }
             }

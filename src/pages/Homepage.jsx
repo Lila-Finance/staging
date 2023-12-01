@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 
-
 const Homepage = () => {
   const nextPageRef = useRef();
 
@@ -35,8 +34,6 @@ const Homepage = () => {
         </div>
       </div>
 
-      {/* second part
-      {nextPage === true ? <Portfolio nextPageRef={nextPageRef} /> : null} */}
     </div>
   );
 };

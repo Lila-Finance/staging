@@ -33,7 +33,7 @@ const Market = ({ nextPageRef }) => {
   const getNetwork = () => {
     return network;
   }
-  const maturityDuration = ["1", "3", "6"];
+  const maturityDuration = ["10", "30", "60"];
 const [activeMaturities, setActiveMaturities] = useState(0);
 const toggleMaturity = (index) => {
     setActiveMaturities(index);
@@ -69,7 +69,7 @@ const toggleMaturity = (index) => {
     setShowPopup(false);
   };
   const [network, setNetwork] = useState("None");
-  const [messsage, setMessage] = useState("Choose a Valid Network/Connect Wallet");
+  const [messsage, setMessage] = useState("Connect Wallet");
   const [pools, setPools] = useState([]);
 
   const [shownPools, setShownPools] = useState([]);
@@ -273,7 +273,7 @@ useEffect(() => {
           <div className="w-full max-w-[15vw] flex flex-col items-center text-center ">
             {/* Maturity (Months) */}
             <div className="px-auto">
-              <p className="text-m font-bold text-white">Maturity (Months)</p>
+              <p className="text-m font-bold text-white">Maturity (Minutes)</p>
 
               {/* maturity btns */}
               <div className="flex items-center gap-10 mt-4">
@@ -393,8 +393,8 @@ useEffect(() => {
                     key={id}
                     className={`w-full flex items-center justify-between py-5 mb-1 ${
                       idx === shownPools.length - 1
-                        ? ""
-                        : "border-b border-b-primaryColor"
+                        ? "border-b-2 border-b-primaryBg"
+                        : "border-t-2 border-primaryBg border-b-2 border-b-primaryColor"
                     }  cursor-pointer hover:border-2 hover:border-primaryColor duration-200`}
                   >
                     

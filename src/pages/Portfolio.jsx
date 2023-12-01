@@ -322,8 +322,8 @@ const Portfolio = () => {
                 <div
                   key={idx}
                   className={`w-full flex items-center justify-between py-5 mb-1 ${
-                    
-                      "border-b border-b-primaryColor"
+
+                      "border-t-2 border-primaryBg border-b-2 border-b-primaryColor"
                   }  cursor-pointer hover:border-2 hover:border-primaryColor duration-200`}
                 >
                   <div className="min-w-[100px] lg:w-[20%] flex items-center justify-start gap-2 px-5">
