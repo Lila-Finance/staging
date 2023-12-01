@@ -130,7 +130,7 @@ const Portfolio = () => {
     return num.toFixed(2);
 }
 
-  const [balances, setBalances] = useState([0, 0, 0, 0]);
+  const [balances, setBalances] = useState([0, 0, 0]);
   const [withdrawArgs, setWithdrawArgs] = useState([]);
 
   useEffect(() => {
@@ -140,6 +140,9 @@ const Portfolio = () => {
         for(let i = 0; i < positions.length; i++){
             const [{ asset, rate_time, strategy, duration_between_payments, init_payouts, deposit_amount, payouts_payed_out }, strageyname, Trueapy, positionID] = positions[i];
             console.log(positions[i])
+            if(Number(payouts_payed_out) == Number(init_payouts)){
+                continue;
+            }
             const token = assets[asset];
             const decimal = token == "DAI" ? 18 : 6;                
             const principal = Number(ethers.formatUnits(deposit_amount, decimal));
@@ -154,9 +157,11 @@ const Portfolio = () => {
             dueBalance += paymentspassed*payoutamount
 
             dueBalance -= payouts_payed_out*payoutamount;
-
+            console.log(positions[i])
             if(token == 'DAI'){
                 balancescopy[0] += dueBalance
+            }else if(token == 'USDC'){
+                balancescopy[1] += dueBalance
             }
             if(dueBalance > 0){
                 current.push(positionID);
@@ -165,7 +170,7 @@ const Portfolio = () => {
         }
         console.log(balancescopy[0])
         setBalances(balancescopy)
-        setWithdrawArgs(current)
+        setWithdrawArgs([current, current.length])
     }
   }, [positions]);
   useContractEvent({
@@ -179,57 +184,85 @@ const Portfolio = () => {
 
   const {
     data,
-    write: widthdraw,
+    write: batchedWidthdraw,
     isSuccess: isSuccessDeposit,
     } = useContractWrite({
         address: addresses.pools_provider,
         abi: ILilaPoolsProvider.abi,
-        functionName: "withdraw",
+        functionName: "batchedWithdraw",
         args: withdrawArgs,
     });
 
   const withdrawAll = () => {
     console.log("Withdrawing All");
     console.log(withdrawArgs);
-    widthdraw();
+    batchedWidthdraw();
   }
   return (
     <div className="min-h-screen bg-primaryBg relative">
       <Navbar setNetwork={setNetwork} />
-      <div className="container mx-auto w-11/12">
+      <div className="container mx-auto w-11/12" style={{ minHeight: `calc(100vh - 250px)` }}>
 
-
+        {
+            balances.every(balance => balance == "0.00") ? 
+            
+            <div className="mt-12">
+                <p className="text-center text-xl md:text-3xl text-white">
+                    Positions
+                </p>
+            </div>: 
+            <div className="mt-12">
+                <p className="text-center text-xl md:text-3xl text-white">
+                Unclaimed Balance
+                </p>
+    
+                <div className="flex items-center justify-center gap-10 md:gap-[70px] mt-8">
+                
+                {
+                balances[0] != "0.00" && 
+                    <p className="text-center text-lg md:text-xl lg:text-2xl text-white">
+                    {to3NumbersAndChar(balances[0])} DAI
+                    </p>
+                }
+                {
+                balances[1] != "0.00" && 
+                    <p className="text-center text-lg md:text-xl lg:text-2xl text-white">
+                    {to3NumbersAndChar(balances[1])} USDC
+                    </p>
+                }
+                {
+                balances[2] != "0.00" && 
+                    <p className="text-center text-lg md:text-xl lg:text-2xl text-white">
+                    {to3NumbersAndChar(balances[2])} USDT
+                    </p>
+                }
+                
+                {/* <p className="text-center text-lg md:text-xl lg:text-2xl text-white">
+                    {to3NumbersAndChar(balances[3])} ETH
+                </p> */}
+                </div>
+    
+                <div className="text-center mt-7">
+                <button onClick={withdrawAll}
+                className="bg-primaryColor text-lg font-medium px-12 py-2 rounded-[30px] border-2 border-primaryColor hover:bg-primaryBg hover:border-2 hover:border-primaryColor hover:text-white">
+                    Claim
+                </button>
+                </div>
+                <div className="mt-32">
+                    <p className="text-center text-xl md:text-3xl text-white">
+                        Positions
+                    </p>
+                </div>
+            </div>
+            
+        }
         {/* heading */}
-        <div className="mt-12">
-          <p className="text-center text-xl md:text-3xl text-white">
-            Unclaimed Balance
-          </p>
-
-          <div className="flex items-center justify-center gap-10 md:gap-[70px] mt-8">
-            <p className="text-center text-lg md:text-xl lg:text-2xl text-white">
-              {to3NumbersAndChar(balances[0])} DAI
-            </p>
-            <p className="text-center text-lg md:text-xl lg:text-2xl text-white">
-              {to3NumbersAndChar(balances[1])} USDC
-            </p>
-            <p className="text-center text-lg md:text-xl lg:text-2xl text-white">
-              {to3NumbersAndChar(balances[2])} USDT
-            </p>
-            <p className="text-center text-lg md:text-xl lg:text-2xl text-white">
-              {to3NumbersAndChar(balances[3])} ETH
-            </p>
-          </div>
-
-          <div className="text-center mt-7">
-            <button onClick={withdrawAll}
-            className="bg-primaryColor text-lg font-medium px-12 py-2 rounded-[30px] hover:-translate-x-2 duration-200">
-              Claim
-            </button>
-          </div>
-        </div>
+        
+        
+        
 
         {/* data table */}
-        <div className="w-[95%] max-w-[900px] mx-auto mt-20 lg:mt-32 lg:pb-0 pb-36">
+        <div className="w-[95%] max-w-[900px] mx-auto mt-20 lg:mt-12 pb-36">
           {/* heading */}
           <div className="w-full flex items-center justify-between pb-4 
                         border-b-[4px] border-b-primaryColor overflow-x-auto">
@@ -261,6 +294,9 @@ const Portfolio = () => {
                 const principal = to3NumbersAndChar(ethers.formatUnits(deposit_amount, decimal));
                 
                 const date = new Date((Number(rate_time)+Number(duration_between_payments)*init_payouts)*1000)
+                console.log(new Date(Number(rate_time)*1000))
+                console.log(Number(duration_between_payments)*init_payouts)
+                console.log(date)
                 const maturity = (date.getUTCMonth() + 1) + '/' + date.getUTCDate() + '/' + date.getFullYear();
                 // console.log(network.toLowerCase())
                 const apy = Trueapy == 0 ? mapping[network.toLowerCase()]["Aave"][token]["1m"]["rate"] : Trueapy/100;
@@ -285,7 +321,7 @@ const Portfolio = () => {
                   className={`w-full flex items-center justify-between py-5 mb-1 ${
                     
                       "border-b border-b-primaryColor"
-                  }  cursor-pointer hover:shadow-rowShadow duration-200`}
+                  }  cursor-pointer hover:border-2 hover:border-primaryColor duration-200`}
                 >
                   <div className="min-w-[100px] lg:w-[20%] flex items-center justify-start gap-2 px-5">
                     <p className="text-lg text-white font-medium">{token}</p>
@@ -321,10 +357,12 @@ const Portfolio = () => {
             })}
           </div>
         </div>
+        {/* <div className="bottom-0 mb-[0px] w-full h-[110px] bg-primaryBg mt-10"></div> */}
       </div>
       
-      <div className="w-full h-[55px] bg-primaryColor mt-10"></div>
-      <div className="w-full h-[55px]"></div>
+      {/* <div className="w-full h-[55px] bg-primaryColor mt-10"></div> */}
+      <div className="bottom-0 mb-[50px] w-full h-[55px] bg-primaryColor"></div>
+      <div className="bottom-0 mb-[0px] w-full h-[55px] bg-primaryBg mt-10"></div>
     </div>
   );
 };

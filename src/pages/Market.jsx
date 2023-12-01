@@ -261,7 +261,7 @@ useEffect(() => {
       className="relative bg-primaryBg min-h-screen lg:pb-0 pb-20"
     >
         <Navbar setNetwork={setNetwork} showPopup={showPopup||showConfirmPopup} />
-      <div className="container mx-auto w-11/12 min-h-screen">
+      <div className="container mx-auto w-11/12 min-h-screen" style={{ minHeight: `calc(100vh - 250px)` }}>
         <div className="mt-8">
             <p className="text-center text-2xl md:text-4xl text-white font-bold">
                 {messsage}
@@ -363,10 +363,7 @@ useEffect(() => {
                       }} 
                 />
                 </div>
-              <div className="w-4/12 flex items-center justify-end gap-2 px-5">
-                <p className="text-m text-white font-bold">Maturity</p>
-                {/* <img src="./images/header-arrow.svg" alt="" /> */}
-              </div>
+              
 
               <div className="w-4/12 flex items-center justify-end gap-2 px-5">
                 <p className="text-m text-white font-bold">TVL</p>
@@ -398,8 +395,9 @@ useEffect(() => {
                       idx === shownPools.length - 1
                         ? ""
                         : "border-b border-b-primaryColor"
-                    }  cursor-pointer hover:shadow-rowShadow duration-200`}
+                    }  cursor-pointer hover:border-2 hover:border-primaryColor duration-200`}
                   >
+                    
                     <div className="w-4/12 flex items-center justify-start gap-2 px-5">
                       <p className="text-sm text-white font-medium">{asset}</p>
                     </div>
@@ -412,9 +410,9 @@ useEffect(() => {
                       <p className="text-sm text-white font-medium">{rate}%</p>
                     </div>
 
-                    <div className="w-4/12 flex items-center justify-end gap-2 px-5">
+                    {/* <div className="w-4/12 flex items-center justify-end gap-2 px-5">
                       <p className="text-sm text-white font-medium">{duration[0]} Month</p>
-                    </div>
+                    </div> */}
 
                     <div className="w-4/12 flex items-center justify-end gap-2 px-5">
                       <p className="text-sm text-white font-medium">{to3NumbersAndChar(tvl)}</p>
@@ -425,7 +423,7 @@ useEffect(() => {
             </div>
 
             {/* pagination */}
-            <div className="flex items-center justify-center gap-14 mt-5 md:mt-14 lg:mb-0 mb-10">
+            <div className="flex items-center justify-center gap-14 mt-5 md:mt-14 lg:mb-0">
               {pagination?.map((item, idx) => (
                 <div
                   key={idx}
@@ -449,7 +447,7 @@ useEffect(() => {
 
         </div>
       </div>
-      <div className="w-full h-[55px] bg-primaryColor mt-10"></div>
+      <div className="w-full h-[55px] bg-primaryColor"></div>
       <div className="w-full h-[55px]"></div>
       {(showPopup||showConfirmPopup) === true ? <Overlay closeFunc={closePopup} /> : null}
             <Popup showPopup={showPopup} getBalance={getUserBalance} selectedPool={pools[selectedPool]}
