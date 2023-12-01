@@ -249,13 +249,13 @@ const Popup = ({ showPopup, getBalance, selectedPool, userAddress, publicClient,
         <p className="text-lg text-white font-medium">{safeString(1)}</p>
         <p className="text-lg text-white font-medium">{safeString(0)}</p>
         <p className="text-lg text-white font-medium">{safeString(4)}%</p>
-        <p className="text-lg text-white font-medium"> {safeString(2,true)} {network().toLowerCase() == "sepolia" ? "Minutes": "Months"}</p>
+        <p className="text-lg text-white font-medium"> {safeString(2,true)} {network() ? network().toLowerCase() == "sepolia" ? "Minutes": "Months" : "-"}</p>
       </div>
 
       <div className="items-center justify-between py-5 border-b border-b-primaryColor">
         <p className="text-lg text-white font-medium pb-2"> 
         Payouts Every:  
-        {network().toLowerCase() == "sepolia" ? " 10 Minutes": " 1 Month"}</p>
+        {network() ? network().toLowerCase() == "sepolia" ? " 10 Minutes": " 1 Month" : "-"}</p>
         <p className="text-lg text-white font-medium"> 
         Payout Rate:  {Number(safeString(4))/Number(safeString(2,true)[0])}%
         </p>
