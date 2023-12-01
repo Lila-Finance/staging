@@ -288,7 +288,8 @@ const Portfolio = () => {
           {/* data row */}
           <div className="w-full">
             {positions?.map((item, idx) => {
-              const [{ asset, rate_time, strategy, duration_between_payments, init_payouts, deposit_amount }, strageyname, Trueapy] = item;
+              const [{ asset, rate_time, strategy, duration_between_payments, init_payouts, deposit_amount, payouts_payed_out }, strageyname, Trueapy] = item;
+              
               const token = assets[asset];
                 const decimal = token == "DAI" ? 18 : 6;                
                 const principal = to3NumbersAndChar(ethers.formatUnits(deposit_amount, decimal));
@@ -301,8 +302,10 @@ const Portfolio = () => {
                 // console.log(network.toLowerCase())
                 const apy = Trueapy == 0 ? mapping[network.toLowerCase()]["Aave"][token]["1m"]["rate"] : Trueapy/100;
                 const paymentspassed = Math.floor((Math.floor(Date.now() / 1000) - (Number(rate_time))) / Number(duration_between_payments))
-                let nextyeilddate;
+                let nextyeilddate = maturity;
                 let nextyeildamount = 0;
+                if(Number(payouts_payed_out) != Number(init_payouts)){
+                    
                 if(paymentspassed >= Number(init_payouts) - 1){
                     nextyeilddate = maturity;
                 }else{
@@ -311,7 +314,7 @@ const Portfolio = () => {
                 }
                 nextyeildamount += apy/100 * Number(ethers.formatUnits(deposit_amount, decimal))/init_payouts;
                 if(paymentspassed == Number(init_payouts) - 1) nextyeildamount+=Number(ethers.formatUnits(deposit_amount, decimal))
-                
+                }
                 nextyeildamount = to3NumbersAndChar(nextyeildamount)
 
               
