@@ -6,7 +6,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import Homepage from "./pages/Homepage.jsx";
 import Portfolio from "./pages/Portfolio.jsx";
 import Market from "./pages/Market.jsx";
-import Facet from "./pages/Facet.jsx";
+import Faucet from "./pages/Faucet.jsx";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
@@ -50,7 +50,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <Route index element={<Homepage />} />
               <Route path="market" element={<Market />} />
               <Route path="portfolio" element={<Portfolio />} />
-              <Route path="facet" element={<Facet />} />
+              <Route path="Faucet" element={<Faucet />} />
             </Route>
           </Routes>
         </HashRouter>

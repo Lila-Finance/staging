@@ -7,10 +7,10 @@ import { ethers } from "ethers";
 import IERC20 from "../abi/IERC20.json";
 import BigNumber from "bignumber.js";
 import {useContractWrite, useContractEvent} from "wagmi";
-import IFacet from "../abi/IFaucet.json";
+import IFaucet from "../abi/IFaucet.json";
 
-const Facet = () => {
-    const facet_address = "0xC959483DBa39aa9E78757139af0e9a2EDEb3f42D";
+const Faucet = () => {
+    const Faucet_address = "0xC959483DBa39aa9E78757139af0e9a2EDEb3f42D";
     const [network, setNetwork] = useState("None");
     const dataTableHeading = ["Asset", "Balance", "Supply"];
     
@@ -23,16 +23,16 @@ const Facet = () => {
     const { address: userAddress } = useAccount();
     const publicClient = usePublicClient();
 
-    const [facetArgs, setFacetArgs] = useState([]);
+    const [FaucetArgs, setFaucetArgs] = useState([]);
     const {
         data,
-        write: facetCall,
+        write: FaucetCall,
         isSuccess: isSuccessDeposit,
     } = useContractWrite({
-        address: facet_address,
-        abi: IFacet.abi,
+        address: Faucet_address,
+        abi: IFaucet.abi,
         functionName: "mint",
-        args: facetArgs,
+        args: FaucetArgs,
     });
     
     
@@ -101,12 +101,12 @@ const Facet = () => {
         fetchBalances();
     }, []);
 
-    const facet = async (name) => {
+    const Faucet = async (name) => {
         let amount = "1000000000"
         if(name == "DAI"){
             amount = "1000000000000000000000";
         }
-        setFacetArgs([assets["sepolia"][name], userAddress, amount]);
+        setFaucetArgs([assets["sepolia"][name], userAddress, amount]);
     }
 
     // const getUserBalance = async (name) => {
@@ -191,10 +191,10 @@ const Facet = () => {
                   <div className="min-w-[100px] lg:w-[20%] flex items-center justify-center gap-2 pl-5 pr-3">
                   <div className="text-center">
                     <button 
-                    onClick={facetCall}
-                    onMouseEnter={() => facet(item["name"])} 
+                    onClick={FaucetCall}
+                    onMouseEnter={() => Faucet(item["name"])} 
                     className="bg-primaryColor text-m font-medium px-6 py-1 rounded-[30px] border-2 border-primaryColor hover:bg-primaryBg hover:border-2 hover:border-primaryColor hover:text-white">
-                        Facet
+                        Faucet
                     </button>
                     </div>
                   </div>
@@ -209,4 +209,4 @@ const Facet = () => {
   );
 };
 
-export default Facet;
+export default Faucet;
