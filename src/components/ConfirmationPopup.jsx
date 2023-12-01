@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const ConfirmationPopup = ({showPopup, setShowConfirmPopup, amount, token}) => {
  const close = () =>{
@@ -37,7 +38,9 @@ const ConfirmationPopup = ({showPopup, setShowConfirmPopup, amount, token}) => {
         className="bg-primaryColor text-lg font-medium px-4 py-1 rounded-[30px] border-2 border-primaryColor
         hover:bg-primaryBg hover:border-2 hover:border-primaryColor hover:text-white">
             <div className="flex items-center justify-center gap-2">
-            <p>See Position</p>
+            <Link to={"/portfolio"}>
+                <p>See Position</p>
+            </Link>
             </div>
         </button>
       </div>
