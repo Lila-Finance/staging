@@ -146,7 +146,7 @@ const Portfolio = () => {
             const token = assets[asset];
             const decimal = token == "DAI" ? 18 : 6;                
             const principal = Number(ethers.formatUnits(deposit_amount, decimal));
-            const apy = Trueapy == 0 ? mapping[network.toLowerCase()]["Aave"][token]["1m"]["rate"] : Trueapy/100;
+            const apy = Trueapy == 0 ? network.toLowerCase() == "sepolia" ? mapping[network.toLowerCase()]["Aave"][token][init_payouts.toString()+"0m"] != undefined ? mapping[network.toLowerCase()]["Aave"][token][init_payouts.toString()+"0m"]["rate"] : Trueapy/100 : 0 : 0;
             let paymentspassed = Math.floor((Math.floor(Date.now() / 1000) - (Number(rate_time))) / Number(duration_between_payments))
             let payoutamount = apy/100 * principal / init_payouts;
             let dueBalance = 0;
