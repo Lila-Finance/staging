@@ -83,7 +83,9 @@ useEffect(() => {
     if(network != "None" && network != undefined){
     setMessage(network +" Markets")
     let map = mapping[network.toLowerCase()];
-    // console.log(map);
+    if(!map || map == undefined){
+        return;
+    }
     function convertMapToListOfLists(map) {
         const listOfLists = [];
         // Iterate through each top-level property (like "aave")
@@ -99,6 +101,7 @@ useEffect(() => {
       
         return listOfLists;
       }
+
       const list = convertMapToListOfLists(map);  
     //   setPools(list);
     //   console.log(list);
