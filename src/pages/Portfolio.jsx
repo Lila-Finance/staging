@@ -295,12 +295,12 @@ const Portfolio = () => {
                 const principal = to3NumbersAndChar(ethers.formatUnits(deposit_amount, decimal));
                 
                 const date = new Date((Number(rate_time)+Number(duration_between_payments)*init_payouts)*1000)
-                console.log(new Date(Number(rate_time)*1000))
-                console.log(Number(duration_between_payments)*init_payouts)
-                console.log(date)
+                // console.log(new Date(Number(rate_time)*1000))
+                // console.log(Number(duration_between_payments)*init_payouts)
+                // console.log(date)
                 const maturity = (date.getUTCMonth() + 1) + '/' + date.getUTCDate() + '/' + date.getFullYear();
-                // console.log(network.toLowerCase())
-                const apy = Trueapy == 0 ? network.toLowerCase() == "sepolia" ? mapping[network.toLowerCase()]["Aave"][token]["10m"]["rate"] : Trueapy/100 : 0;
+                // console.log(init_payouts)
+                const apy = Trueapy == 0 ? network.toLowerCase() == "sepolia" ? mapping[network.toLowerCase()]["Aave"][token][init_payouts.toString()+"0m"]["rate"] : Trueapy/100 : 0;
                 const paymentspassed = Math.floor((Math.floor(Date.now() / 1000) - (Number(rate_time))) / Number(duration_between_payments))
                 let nextyeilddate = maturity;
                 let nextyeildamount = 0;
