@@ -300,7 +300,7 @@ const Portfolio = () => {
                 console.log(date)
                 const maturity = (date.getUTCMonth() + 1) + '/' + date.getUTCDate() + '/' + date.getFullYear();
                 // console.log(network.toLowerCase())
-                const apy = Trueapy == 0 ? mapping[network.toLowerCase()]["Aave"][token]["1m"]["rate"] : Trueapy/100;
+                const apy = Trueapy == 0 ? network.toLowerCase() == "sepolia" ? mapping[network.toLowerCase()]["Aave"][token]["1m"]["rate"] : Trueapy/100 : 0;
                 const paymentspassed = Math.floor((Math.floor(Date.now() / 1000) - (Number(rate_time))) / Number(duration_between_payments))
                 let nextyeilddate = maturity;
                 let nextyeildamount = 0;
