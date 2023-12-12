@@ -3,15 +3,20 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      screens: {
-        "3xl": "1700px",
-      },
       colors: {
-        navButtonBg: "#FFC9C9",
-        arbitrumBg: "rgba(27, 74, 221, 0.87)",
-        aaveBg: "#B6509E",
-        depositBg: "rgba(255, 201, 201, 0.50)",
-        portfolioBottomBg: "#830707",
+        primaryBg: "#333745",
+        primaryBgDark: "#333745",
+        primaryColor: "#FFC9C9",
+        primaryColorDark: "#ba8f8f",
+      },
+      borderRadius: {
+        barRadius: "50px",
+      },
+      boxShadow: {
+        barShadow:
+          "0px 4px 5px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset",
+        rowShadow:
+          "0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset, 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25);",
       },
     },
   },
