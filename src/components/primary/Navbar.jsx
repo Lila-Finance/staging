@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Navbar = ({ launchApp }) => {
   // links
@@ -51,9 +52,9 @@ const Navbar = ({ launchApp }) => {
             </div>
           </div>
         </div>
-
+        <ConnectButton></ConnectButton>
         {/* right side */}
-        {walletConnected === false ? (
+        {/* {walletConnected === false ? (
           <div className="md:w-auto w-6/12 flex items-center justify-end">
             {launchApp === true ? (
               <div>
@@ -82,7 +83,7 @@ const Navbar = ({ launchApp }) => {
               0xab...cd
             </button>
           </div>
-        ) : null}
+        ) : null} */}
       </div>
       {/* Wrapper end */}
 
