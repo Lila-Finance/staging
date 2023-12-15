@@ -1,4 +1,4 @@
-const AssetProcotolTopContent = () => {
+const AssetProcotolTopContent = ({boolean}) => {
     return (
       <div className="flex gap-10 md:flex-row flex-col min-h-[192px] mb-10">
         {/* left side start */}
@@ -42,11 +42,25 @@ const AssetProcotolTopContent = () => {
         {/* right side start */}
         <div className="w-full flex flex-col justify-between gap-6 md:gap-4">
           <div className="text-end">
+            
             <p className="xl:text-lg 2xl:text-xl">
-              Welcome to the Market
+
+            {!(boolean[0] || boolean[1] || boolean[2] || boolean[3]|| boolean[4]) && "Welcome to the Market"}
+            {!(!boolean[0] || boolean[1] || boolean[2]|| boolean[3]|| boolean[4]) && "Build a	Personalized Position"}
+            {!(boolean[0] || !boolean[1] || boolean[2]|| boolean[3]|| boolean[4]) && "Maturity and Rate Updated"}
+            {!(boolean[0] || boolean[1] || !boolean[2]|| boolean[3]|| boolean[4]) && "Deposit	Amount Updated"}
+            {!(boolean[0] || boolean[1] || !boolean[2]|| !boolean[3]|| boolean[4]) && "Allow Confirmed"}
+            {!(boolean[0] || boolean[1] || !boolean[2]|| boolean[3] || !boolean[4]) && "Thank You for Choosing Lila Finance"}
+  
+
             </p>
             <p className="text-2xl 3xl:text-3xl 2xl:mt-2.5 3xl:mt-3.5">
-              Select a Base to Customize
+            {!(boolean[0] || boolean[1] || boolean[2]|| boolean[3]|| boolean[4]) && "Select a Base to Customize"}
+            {!(!boolean[0] || boolean[1] || boolean[2]|| boolean[3]|| boolean[4]) && "Select a Maturity"}
+            {!(boolean[0] || !boolean[1] || boolean[2]|| boolean[3]|| boolean[4]) && "Hit 'Enter' After Inputing Deposit Amount"}
+            {!(boolean[0] || boolean[1] || !boolean[2]|| boolean[3]|| boolean[4]) && "Two More Steps - Approval and Deposit"}
+            {!(boolean[0] || boolean[1] || !boolean[2]|| !boolean[3]|| boolean[4]) && "Finalize Deposit"}
+            {!(boolean[0] || boolean[1] || !boolean[2]|| boolean[3]|| !boolean[4]) && "View this position in Your Portfolio"}
             </p>
           </div>
   

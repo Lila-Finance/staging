@@ -1,9 +1,9 @@
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { marketContents } from "../../constants";
-const DepositContent = ({ selectedAsset, setSelectedAsset }) => {
+const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, setFinalize, finalize }) => {
   let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
   const { bottomCoin, coinName, id, topBg, value, wallet } = globitem[0];
-  const [allow, setAllow] = useState(true);
 
   return (
     <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-5 items-end">
@@ -43,16 +43,26 @@ const DepositContent = ({ selectedAsset, setSelectedAsset }) => {
 
       {/* Allow */}
       <div 
-      onClick={() => setAllow(false)}
-      className={`w-full bg-${allow ? "[#FFC9C9]" : "depositBg"} px-3.5 h-[105px] flex items-center justify-end cursor-pointer`}>
+      onClick={() => setDeposit()}
+      className={`w-full ${(!deposit && !finalize) ? "bg-[#FFC9C9]" : "bg-depositBg"} px-3.5 h-[105px] flex items-center justify-end cursor-pointer`}>
         <p className="text-lg xl:text-xl text-black">Allow</p>
       </div>
 
       {/* Deposit */}
       <div 
-      className={`w-full bg-${!allow ? "[#FFC9C9]" : "depositBg"} px-3.5 h-[105px] flex items-center justify-end cursor-pointer`}>
+      onClick={() => setFinalize()}
+      className={`w-full ${(deposit && !finalize) ? "bg-[#FFC9C9]" : "bg-depositBg"} px-3.5 h-[105px] flex items-center justify-end cursor-pointer`}>
         <p className="text-lg xl:text-xl text-black">Deposit</p>
       </div>
+
+      {finalize &&
+      <NavLink to={"/portfolio"}>
+        <div 
+        className={`w-full bg-[#FFC9C9] px-3.5 h-[105px] flex items-center justify-end cursor-pointer`}>
+          <p className="text-lg xl:text-xl text-black">Portfolio</p>
+        </div>
+      </NavLink>
+      }
     </div>
   );
 };

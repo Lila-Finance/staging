@@ -1,8 +1,20 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Navbar = ({ launchApp }) => {
+  const history = useNavigate();
+  const location = useLocation();
+
+  const handleNavLinkClick = (target) => {
+    // Check if the target is the current route
+    if (location.pathname === target) {
+      // Refresh the page
+      history.go(0);
+    }
+  };
+
+
   // links
   const navLinks = [
     {
@@ -38,13 +50,12 @@ const Navbar = ({ launchApp }) => {
           {/* title */}
           <div className="md:block hidden">
             <div className="flex items-center gap-14">
-              {navLinks?.map((item) => (
+                            {navLinks?.map((item) => (
                 <NavLink
                   key={item.id}
                   to={item.target}
-                  className={
-                    "text-sm md:text-base xl:text-lg"
-                  }
+                  className="text-sm md:text-base xl:text-lg"
+                  onClick={() => handleNavLinkClick(item.target)}
                 >
                   {item.title}
                 </NavLink>

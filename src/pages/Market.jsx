@@ -26,6 +26,8 @@ const Market = () => {
   // Deposit content
   const [makeDeposit, setMakeDeposit] = useState(false);
   const [enterDeposit, setEnterDeposit] = useState(false);
+  const [deposit, setDeposit] = useState(false);
+  const [finalize, setFinalize] = useState(false);
 
   const showAmountScreen = () => {
     setEnterDeposit(true);
@@ -35,6 +37,16 @@ const Market = () => {
     setEnterDeposit(false);
     setMakeDeposit(true);
   };
+  const showDepositValue = () => {
+    // setMakeDeposit(false);
+    setDeposit(true);
+  };
+  const showFinalizedScreen = () => {
+    // setMakeDeposit(false);
+    setDeposit(false);
+    setFinalize(true);
+  };
+  
 
   return (
     <div className="w-full pb-10">
@@ -43,7 +55,7 @@ const Market = () => {
       
       <div className="w-full 2xl:max-w-7xl 3xl:max-w-[1400px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24">
         {/* INitial Content */}
-        {<AssetProcotolTopContent></AssetProcotolTopContent>}
+        {<AssetProcotolTopContent boolean={[monthSelection, enterDeposit, makeDeposit, deposit, finalize]}></AssetProcotolTopContent>}
         
         {<InitialContents selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM} />}
 
@@ -54,7 +66,7 @@ const Market = () => {
         {enterDeposit && <DepositAmountContent toggleDeposit={showDepositScreen} selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM}/>}
 
         {/* DepositContent */}
-        {makeDeposit && <DepositContent selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM} />}
+        {makeDeposit && <DepositContent selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM} deposit={deposit} finalize={finalize} setDeposit={showDepositValue} setFinalize={showFinalizedScreen}/>}
       </div>
     </div>
   );

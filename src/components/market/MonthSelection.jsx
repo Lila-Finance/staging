@@ -2,7 +2,6 @@ import { marketContents } from "../../constants";
 const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
   // data
   let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
-  console.log(globitem)
   const { bottomCoin, coinName, id, topBg, value, wallet } = globitem[0];
   
   const months = [

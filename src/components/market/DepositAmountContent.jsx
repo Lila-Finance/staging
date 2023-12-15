@@ -17,7 +17,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
         
         return (
           <div className="grid md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
-            <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px] border-2" onClick={() => setSelectedAsset(-1)} key={10}>
+            <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px] border-2" onClick={() => setSelectedAsset(-1)} key={0}>
                 {/* top content */}
                 <div
                     style={{backgroundColor: `${topBg}`}}
@@ -57,7 +57,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
                     style={{
                     backgroundColor: `${topBg}`,
                     }}
-                    key={id}
+                    key={1}
                     onClick={toggleDeposit}
                 >
                     {/* name */}
@@ -85,7 +85,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
                     style={{
                     backgroundColor: `${topBg}`,
                     }}
-                    key={id}
+                    key={2}
                     onClick={toggleDeposit}
                 >
                     {/* name */}
@@ -122,6 +122,10 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
                                 (e.key !== '.' || e.target.value.includes('.'))
                             ) {
                                 e.preventDefault();
+                            }
+                            if (e.key === 'Enter') {
+                                // Call your function here
+                                toggleDeposit();
                             }
                         }}           
                     />
