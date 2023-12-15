@@ -15,3 +15,24 @@ body {
 .roboto {
   font-family: "Roboto Mono", monospace;
 }
+
+@keyframes floatOffScreen {
+  to {
+    transform: translateX(800px);
+  }
+}
+
+@keyframes floatOffScreenRight {
+  to {
+    transform: translateX(800px);
+  }
+}
+
+.animate-float-off-screen {
+  animation: floatOffScreen 5s ease-out;
+}
+
+.animate-float-off-screen-right {
+  animation: floatOffScreenRight 4s ease-out;
+}
+

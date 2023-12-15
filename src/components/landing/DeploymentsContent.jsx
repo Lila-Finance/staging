@@ -5,11 +5,16 @@ const DeploymentsContent = () => {
   return (
     <div className="w-full pb-[75px]">
       {/* Lila Chain Deployments */}
-      <ArbitrumOneContent />
+      <a href="https://arbitrum.io/" target="_blank" rel="noopener noreferrer">
+        <ArbitrumOneContent />
+      </a>
 
       {/* AAVE V3 */}
-      <AaveContentContent />
+      <a href="https://aave.com/" target="_blank" rel="noopener noreferrer">
+        <AaveContentContent />
+      </a>
     </div>
+
   );
 };
 

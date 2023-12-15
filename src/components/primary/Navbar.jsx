@@ -43,7 +43,7 @@ const Navbar = ({ launchApp }) => {
                   key={item.id}
                   to={item.target}
                   className={
-                    "text-sm md:text-base xl:text-lg hover:translate-y-2 duration-300"
+                    "text-sm md:text-base xl:text-lg"
                   }
                 >
                   {item.title}
