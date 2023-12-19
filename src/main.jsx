@@ -6,7 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Market from "./pages/Market.jsx";
 import Docs from "./pages/Docs.jsx";
 import Portfolio from "./pages/Portfolio.jsx";
-
+import { MarketDataProvider } from "../src/constants/MarketDataProvider";
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   getDefaultWallets,
@@ -63,7 +63,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} modalSize="compact">
-        <RouterProvider router={router} />
+        <MarketDataProvider>
+          <RouterProvider router={router} />
+        </MarketDataProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   </React.StrictMode>

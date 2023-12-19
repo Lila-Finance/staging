@@ -1,7 +1,8 @@
-import { marketContents } from "../../constants";
-import { useState } from "react";
+import { MarketDataContext } from '../../constants/MarketDataProvider';
+
+import { useState, useContext } from "react";
 const InitialContents = ({ setSelectedAsset, selectedAsset }) => {
-  
+  const { marketContents } = useContext(MarketDataContext);
   const [isVisible, setIsVisible] = useState(true);
 
   return (

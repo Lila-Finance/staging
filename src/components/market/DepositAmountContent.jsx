@@ -1,9 +1,11 @@
 
-import { marketContents } from "../../constants";
-import { useRef, useEffect } from "react";
+import { MarketDataContext } from '../../constants/MarketDataProvider'; 
+
+import { useRef, useEffect, useContext } from "react";
 
 const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
         // data
+        const { marketContents } = useContext(MarketDataContext);
         let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
         const { bottomCoin, coinName, id, topBg, value, wallet } = globitem[0];
 

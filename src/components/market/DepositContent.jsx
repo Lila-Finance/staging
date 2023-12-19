@@ -1,7 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
-import { marketContents } from "../../constants";
+import { useState, useContext } from "react";
+import { MarketDataContext } from '../../constants/MarketDataProvider';
+        
 const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, setFinalize, finalize }) => {
+  const { marketContents } = useContext(MarketDataContext);
   let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
   const { bottomCoin, coinName, id, topBg, value, wallet } = globitem[0];
 

@@ -1,24 +1,32 @@
-import { marketContents } from "../../constants";
+import { MarketDataContext } from '../../constants/MarketDataProvider';
+import { useContext} from 'react';
+
 const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
   // data
+  const { marketContents } = useContext(MarketDataContext);
   let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
   const { bottomCoin, coinName, id, topBg, value, wallet } = globitem[0];
-  
+  console.log(globitem[0]);
+  if(globitem == undefined || globitem[0] == undefined || globitem[0]['rates'] == undefined){
+    return (
+      <div></div>
+    );
+  }
   const months = [
     {
       id: 1,
       title: "One Month",
-      content: "a.bc%",
+      content: `${globitem[0]['rates'][0]}%`,
     },
     {
       id: 2,
       title: "Two Months",
-      content: "xy.z%",
+      content: `${globitem[0]['rates'][1]}%`,
     },
     {
       id: 3,
       title: "Six Months",
-      content: "ij.k%",
+      content: `${globitem[0]['rates'][2]}%`,
     },
   ];
 
