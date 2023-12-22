@@ -19,7 +19,7 @@ const Navbar = ({ launchApp }) => {
   const navLinks = [
     {
       id: 1,
-      title: "Market",
+      title: "Testnet Market",
       target: "/market",
     },
     {
@@ -29,8 +29,13 @@ const Navbar = ({ launchApp }) => {
     },
     {
       id: 3,
+      title: "Faucet",
+      target: "/faucet",
+    },
+    {
+      id: 4,
       title: "Docs",
-      target: "/docs",
+      target: "https://lila-finance.gitbook.io/lila-documentation/getting-started-with-cryptocurrency/what-is-decentralized-finance",
     },
   ];
 

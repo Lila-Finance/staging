@@ -20,12 +20,12 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
     },
     {
       id: 2,
-      title: "Two Months",
+      title: "Three Month",
       content: `${globitem[0]['rates'][1]}%`,
     },
     {
       id: 3,
-      title: "Six Months",
+      title: "Six Month",
       content: `${globitem[0]['rates'][2]}%`,
     },
   ];

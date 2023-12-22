@@ -1,4 +1,7 @@
+import { useState } from "react";
 const BannerBottom = () => {
+  const [front, toggleFront] = useState(0)
+
   return (
     <div className=" pb-20">
       {/* Wrapper Start */}
@@ -17,19 +20,44 @@ const BannerBottom = () => {
         <div>
           {/* header */}
           <div className="flex items-center gap-[91px] border-b border-b-black pb-1.5">
-            <p className="text-base md:text-[17px] 2xl:text-lg">Deposit</p>
-            <p className="text-base md:text-[17px] 2xl:text-lg opacity-50">
-              Trade
-            </p>
-            <p className="text-base md:text-[17px] 2xl:text-lg">Earn</p>
+              <button onClick={() => toggleFront(0)}>
+                  <p className={`text-base md:text-[17px] 2xl:text-lg ${front === 0 ? '' : 'opacity-50'}`}>
+                      Deposit
+                  </p>
+              </button>
+              <button onClick={() => toggleFront(1)}>
+                  <p className={`text-base md:text-[17px] 2xl:text-lg ${front === 1 ? '' : 'opacity-50'}`}>
+                      Trade
+                  </p>
+              </button>
+              <button onClick={() => toggleFront(2)}>
+                  <p className={`text-base md:text-[17px] 2xl:text-lg ${front === 2 ? '' : 'opacity-50'}`}>
+                      Earn
+                  </p>
+              </button>
           </div>
+
 
           {/* Content */}
           <div className="pt-1.5">
+            {front == 0 &&
             <p className="text-base md:text-[17px] 2xl:text-lg">
               Enter a position with your preferred <br /> asset, maturity,
               protocol, and rate
             </p>
+            }
+            {front == 1 &&
+            <p className="text-base md:text-[17px] 2xl:text-lg">
+              Sell your positions or buy a new one <br /> 
+              from the Lila Finance Marketplace
+            </p>
+            }
+            {front == 2 &&
+            <p className="text-base md:text-[17px] 2xl:text-lg">
+              Earn cash flow with interest paid every <br /> 
+              month delivered to your portfolio
+            </p>
+            }
           </div>
         </div>
       </div>

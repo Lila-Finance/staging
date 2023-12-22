@@ -4,10 +4,6 @@ export const AaveV3TVLs = [
       TVL: "100.00"
     },
     {
-      TOKEN: "USDC.e",
-      TVL: "500.00"
-    },
-    {
       TOKEN: "DAI",
       TVL: "400.00"
     },
@@ -16,11 +12,7 @@ export const AaveV3TVLs = [
       TVL: "100.00",
     },
     {
-      TOKEN: "Frax",
-      TVL: "500.00",
-    },
-    {
-      TOKEN: "ETH",
+      TOKEN: "wETH",
       TVL: "400.00"
     },
     {

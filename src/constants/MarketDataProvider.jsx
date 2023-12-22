@@ -15,14 +15,6 @@ const marketContentsTemplate = [
     value: "0000.000000000",
   },
   {
-    id: 2,
-    coinName: "USDC.e",
-    wallet: "a.bc% - x.yz%",
-    topBg: "#2774CA",
-    bottomCoin: "AAVE V3",
-    value: "0000.000000000",
-  },
-  {
     id: 3,
     coinName: "DAI",
     wallet: "a.bc% - x.yz%",
@@ -39,16 +31,8 @@ const marketContentsTemplate = [
     value: "0000.000000000",
   },
   {
-    id: 5,
-    coinName: "Frax",
-    wallet: "a.bc% - x.yz%",
-    topBg: "#000",
-    bottomCoin: "AAVE V3",
-    value: "0000.000000000",
-  },
-  {
     id: 6,
-    coinName: "ETH",
+    coinName: "wETH",
     wallet: "a.bc% - x.yz%",
     topBg: "#48CBD9",
     bottomCoin: "AAVE V3",

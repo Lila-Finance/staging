@@ -6,12 +6,6 @@ export const AaveV3Rates = [
       SIX_MONTH: "4.45"
     },
     {
-      TOKEN: "USDC.e",
-      ONE_MONTH: "6.00",
-      THREE_MONTH: "5.45",
-      SIX_MONTH: "4.45"
-    },
-    {
       TOKEN: "DAI",
       ONE_MONTH: "6.00",
       THREE_MONTH: "5.45",
@@ -24,13 +18,7 @@ export const AaveV3Rates = [
       SIX_MONTH: "4.45"
     },
     {
-      TOKEN: "Frax",
-      ONE_MONTH: "6.00",
-      THREE_MONTH: "5.45",
-      SIX_MONTH: "4.45"
-    },
-    {
-      TOKEN: "ETH",
+      TOKEN: "wETH",
       ONE_MONTH: "6.00",
       THREE_MONTH: "5.45",
       SIX_MONTH: "4.45"

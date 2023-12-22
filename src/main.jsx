@@ -4,7 +4,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Market from "./pages/Market.jsx";
-import Docs from "./pages/Docs.jsx";
+import Faucet from "./pages/Faucet.jsx";
 import Portfolio from "./pages/Portfolio.jsx";
 import { MarketDataProvider } from "../src/constants/MarketDataProvider";
 import '@rainbow-me/rainbowkit/styles.css';
@@ -54,8 +54,8 @@ const router = createBrowserRouter([
     element: <Portfolio />,
   },
   {
-    path: "/docs",
-    element: <Docs />,
+    path: "/faucet",
+    element: <Faucet />,
   },
 ]);
 
