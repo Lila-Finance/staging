@@ -16,12 +16,15 @@ import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   mainnet,
   arbitrum,
+  sepolia,
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
+import { ExchangeRateProvider } from "./helpers/Converter.jsx";
+
 const { chains, publicClient } = configureChains(
-  [arbitrum],
+  [sepolia],
   [
     alchemyProvider({ apiKey: '2s-1F2BiWb0o7mA2LieeKX4j46A0YhM3' }),
     publicProvider()
@@ -59,14 +62,16 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains} modalSize="compact">
-        <MarketDataProvider>
-          <RouterProvider router={router} />
-        </MarketDataProvider>
-      </RainbowKitProvider>
-    </WagmiConfig>
-  </React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(  
+    <React.StrictMode>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={chains} modalSize="compact">
+        <ExchangeRateProvider>  
+          <MarketDataProvider>
+            <RouterProvider router={router} />
+          </MarketDataProvider>
+          </ExchangeRateProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </React.StrictMode>
 );

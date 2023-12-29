@@ -1,6 +1,63 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+
+import address from "../../data/address.json";
+
+import IProxy from "../../abi/IProxy.json";
+
+import { ExchangeRateContext } from '../../helpers/Converter';
+
 const BannerBottom = () => {
   const [front, toggleFront] = useState(0)
+  const { publicClient, to10DecUSD } = useContext(ExchangeRateContext);
+
+  const [totalTVL, setTotalTVL] = useState(BigInt(0)); // 10 0's
+
+  const getProxyTVL = async (proxyAddress) => {
+    if (publicClient) {
+        const ProxyBalance = await publicClient.readContract({
+            address: proxyAddress,
+            abi: IProxy.abi,
+            functionName: "balance",
+            args: [],
+        });
+        return ProxyBalance;
+    }
+
+    return 0;
+  };
+
+  const getTotalTVL = async () => {
+    
+    let sumTVL = BigInt(0);
+    for(let proxy in address.proxies){
+      let proxy_address = address.proxies[proxy];
+      let value = await getProxyTVL(proxy_address);
+      let token = proxy.split('_')[0];
+      sumTVL += to10DecUSD(value, token);
+    }
+    setTotalTVL(sumTVL);
+  };
+
+  useEffect(() => {
+      getTotalTVL();
+      
+
+      const interval = setInterval(() => {
+          getTotalTVL();
+      }, 8000);
+
+      return () => clearInterval(interval);
+  }, []);
+
+  const toTVLString = (value) => {
+    let strValue = value.toString();
+
+    strValue = strValue.padStart(15, '0');
+
+    strValue = strValue.slice(0, -10) + '.' + strValue.slice(-10);
+
+    return `$${strValue}`;
+  };
 
   return (
     <div className=" pb-20">
@@ -9,7 +66,8 @@ const BannerBottom = () => {
         {/* left side */}
         <div>
           <p className="text-xl lg:text-2xl 2xl:text-3xl">
-            $00000.000000000000
+            {toTVLString(totalTVL)}
+            {/* $00000.000000000000 */}
           </p>
           <p className="text-[15px] md:text-base 2xl:text-[17px] mt-2.5">
             of liquidity locked into in Lila Finance

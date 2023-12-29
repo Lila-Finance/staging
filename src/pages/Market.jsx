@@ -21,6 +21,8 @@ const Market = () => {
     setMonthSelection(ni != -1);
     if(ni == -1) setMakeDeposit(false);
     if(ni == -1) setEnterDeposit(false);
+    if(ni == -1) setDeposit(false);
+    if(ni == -1) setFinalize(false);
   };
 
   // Deposit content
@@ -28,13 +30,17 @@ const Market = () => {
   const [enterDeposit, setEnterDeposit] = useState(false);
   const [deposit, setDeposit] = useState(false);
   const [finalize, setFinalize] = useState(false);
+  const [amount, setAmount] = useState(BigInt(0));
+  const [month, setMontht] = useState(0);
 
-  const showAmountScreen = () => {
+  const showAmountScreen = (month) => {
     setEnterDeposit(true);
+    setMontht(month);
     setMonthSelection(false);
   };
-  const showDepositScreen = () => {
+  const showDepositScreen = (value) => {
     setEnterDeposit(false);
+    setAmount(value);
     setMakeDeposit(true);
   };
   const showDepositValue = () => {
@@ -66,7 +72,7 @@ const Market = () => {
         {enterDeposit && <DepositAmountContent toggleDeposit={showDepositScreen} selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM}/>}
 
         {/* DepositContent */}
-        {makeDeposit && <DepositContent selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM} deposit={deposit} finalize={finalize} setDeposit={showDepositValue} setFinalize={showFinalizedScreen}/>}
+        {makeDeposit && <DepositContent selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM} deposit={deposit} finalize={finalize} setDeposit={showDepositValue} setFinalize={showFinalizedScreen} amount={amount} month={month}/>}
       </div>
     </div>
   );

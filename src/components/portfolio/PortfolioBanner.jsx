@@ -1,4 +1,42 @@
-const PortfolioBanner = () => {
+import { useEffect, useContext, useState } from "react";
+import { ExchangeRateContext } from '../../helpers/Converter';
+
+import address from "../../data/address.json";
+
+import ILilaPoolsProvider from "../../abi/ILilaPoolsProvider.json";
+
+const PortfolioBanner = ({ activePositions, expiredPositions }) => {
+
+  const toBigIntString = (value) => {
+    
+    let strValue = value.toString();
+
+    strValue = strValue.padStart(17, '0');
+
+    strValue = strValue.slice(0, -10) + '.' + strValue.slice(-10);
+    
+    return strValue;
+
+}
+
+  const [netWorth, setNetWorth] = useState(BigInt(0));
+  
+  const calculateNetWorth = async (positions) => {
+    let sumNetWorth = BigInt(0);
+    for(let position in positions){
+      let rate = BigInt((positions[position]['rate']*((Number(Date.now()/1000)-Number(positions[position]['blockTimestamp']))/6/6/24/365)*100000000).toFixed(0));
+      let val = positions[position]['amount']*rate;
+      let interest = val/BigInt(10000000000);
+      sumNetWorth += positions[position]['amount'] + interest;
+    }
+    setNetWorth(sumNetWorth);
+  }
+
+
+  useEffect(() => {
+    calculateNetWorth(activePositions);
+  }, [activePositions]);
+
   return (
     <div className="flex gap-10 md:flex-row flex-col">
       {/* left side start */}
@@ -16,7 +54,8 @@ const PortfolioBanner = () => {
               <div className="flex items-center justify-between gap-2">
                 <p className="text-sm lg:text-[17px]">Net Worth:</p>
                 <p className="roboto text-sm lg:text-[17px]">
-                  $00000.000000000000
+                  ${toBigIntString(netWorth)}
+                  {/* $00000.000000000000 */}
                 </p>
               </div>
 

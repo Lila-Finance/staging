@@ -1,0 +1,28 @@
+{
+    "core": {
+        "oracle_address": "0xbcC553ede85F51457Cc0f3A24be34F4d4bB8DD12",
+        "position_address": "0xd923b7dDef7d085D5D0fcbd5B84aa944faAE0D12",
+        "poolprovider_address": "0xB1db0fBd3283033ff3Bcc18C4BcC262252181D38"
+    },
+    "assets": {
+        "usdc": "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8",
+        "dai": "0xFF34B3d4Aee8ddCd6F9AFFFB6Fe49bD371b8a357",
+        "usdt": "0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0",
+        "wbtc": "0x29f2D40B0605204364af54EC677bD022dA425d03",
+        "weth": "0xC558DBdd856501FCd9aaF1E62eae57A9F0629a3c"
+    },
+    "asset_addresses": {
+        "0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8" : "usdc",
+        "0xff34b3d4aee8ddcd6f9afffb6fe49bd371b8a357" : "dai",
+        "0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0" : "usdt",
+        "0x29f2d40b0605204364af54ec677bd022da425d03" : "wbtc",
+        "0xc558dbdd856501fcd9aaf1e62eae57a9f0629a3c" : "weth"        
+    },
+    "proxies": {
+        "usdc_aave_proxy": "0xeE4ACa1Ea9106D40C3Ee649C21cFAC9229665d6c",
+        "dai_aave_proxy": "0x160d8CD5e6bA7d66b1e48a286767ba22B4642ebF",
+        "usdt_aave_proxy": "0xA8B9ed1dA040cFA73853b359027A497EE17e7Bfe",
+        "wbtc_aave_proxy": "0x69B302053dD14eF8A345B32e80e19590aC7dC128",
+        "weth_aave_proxy": "0xeAC33595439ae9f9E309AC6e31146e6CCB1F2C22"
+    }
+}

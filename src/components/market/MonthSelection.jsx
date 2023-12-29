@@ -6,7 +6,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
   const { marketContents } = useContext(MarketDataContext);
   let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
   const { bottomCoin, coinName, id, topBg, value, wallet } = globitem[0];
-  console.log(globitem[0]);
+  
   if(globitem == undefined || globitem[0] == undefined || globitem[0]['rates'] == undefined){
     return (
       <div></div>
@@ -14,17 +14,17 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
   }
   const months = [
     {
-      id: 1,
+      id: 0,
       title: "One Month",
       content: `${globitem[0]['rates'][0]}%`,
     },
     {
-      id: 2,
+      id: 1,
       title: "Three Month",
       content: `${globitem[0]['rates'][1]}%`,
     },
     {
-      id: 3,
+      id: 2,
       title: "Six Month",
       content: `${globitem[0]['rates'][2]}%`,
     },
@@ -32,7 +32,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
 
   return (
     <div className="grid md:grid-cols-4 lg:grid-cols-5 gap-5 items-end">
-      <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px] border-2" onClick={() => setSelectedAsset(-1)} key={10}>
+      <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]" onClick={() => setSelectedAsset(-1)} key={10}>
           {/* top content */}
           <div
             style={{backgroundColor: `${topBg}`}}
@@ -73,7 +73,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
           <div
             className="w-full bg-aaveBg pb-3.5 px-3.5 pt-8 text-end cursor-pointer"
             key={id}
-            onClick={toggleDeposit}
+            onClick={() => toggleDeposit(id)}
           >
             {/* name */}
             <p className="text-lg xl:text-xl text-white">{title}</p>
