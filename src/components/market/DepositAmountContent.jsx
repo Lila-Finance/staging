@@ -1,9 +1,10 @@
 
+import { useBalance } from 'wagmi';
 import { MarketDataContext } from '../../constants/MarketDataProvider'; 
 
-import { useRef, useEffect, useContext } from "react";
+import { useRef, useEffect, useContext, useCallback } from "react";
 
-const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
+const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, amount, onChange, balance }) => {
         // data
         const { marketContents } = useContext(MarketDataContext);
         let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
@@ -15,8 +16,16 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
           // Set focus on the input field when the component mounts
           inputRef.current.focus();
         }, []); // The empty dependency array ensures that the effect runs only once after the initial render
-
         
+        const handleInput = useCallback(
+            (event) => {
+                const input = event.target.value;
+                const withoutSpaces = input.replace(/\s+/g, '');
+                onChange(withoutSpaces)
+            },
+            [onChange]
+        )
+
         return (
           <div className="grid md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
             <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px] border-2" onClick={() => setSelectedAsset(-1)} key={0}>
@@ -77,7 +86,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
                         id === 3 || id === 7 ? "text-black" : "text-white"
                     }`}
                     >
-                    {"00000000.00000"}
+                    {balance ? balance.formatted : 0}
                     </p>
                 </div>
             
@@ -88,13 +97,13 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
                     backgroundColor: `${topBg}`,
                     }}
                     key={2}
-                    onClick={toggleDeposit}
                 >
                     {/* name */}
                     <p
                     className={`text-xl xl:text-[25px] ${
                         id === 3 || id === 7 ? "text-black" : "text-white"
                     }`}
+                    onClick={toggleDeposit}
                     >
                     {"Enter Amount"}
                     </p>
@@ -113,23 +122,13 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
                         style={{
                             backgroundColor: "transparent",
                             border: "none",
+                            width: "100%",
                             outline: 'none',
                             textAlign: 'right', // Right-align text
                             color: id === 3 || id === 7 ? "black" : "white", // Set text color conditionally
                         }}
-                        onKeyDown={(e) => {
-                            // Allow numeric values and a single decimal point
-                            if (
-                                (!/[0-9]/.test(e.key) && e.key !== 'Backspace') &&
-                                (e.key !== '.' || e.target.value.includes('.'))
-                            ) {
-                                e.preventDefault();
-                            }
-                            if (e.key === 'Enter') {
-                                // Call your function here
-                                toggleDeposit();
-                            }
-                        }}           
+                        value={amount}
+                        onChange={handleInput}           
                     />
                 </div>
           </div>
