@@ -157,6 +157,9 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
     calculateTotalEarnings(activePositions, expiredPositions);
   }, [activePositions, expiredPositions]);
 
+  const claimAll = () => {
+    console.log("Called Claim");
+  }
 
   return (
     <div className="flex gap-10 md:flex-row flex-col">
@@ -231,9 +234,11 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
         </div>
 
         {/* Claim All */}
-        <div className="w-[200px] h-[100px] bg-navButtonBg px-3.5 text-end pt-7">
-          <p className="text-base md:text-xl">Claim All</p>
-        </div>
+        <button className="w-[200px] h-[100px] bg-navButtonBg px-3.5 text-end pt-7"
+                onClick={claimAll}>
+            <p className="text-base md:text-xl">Claim All</p>
+        </button>
+
       </div>
       {/* right side end */}
     </div>
