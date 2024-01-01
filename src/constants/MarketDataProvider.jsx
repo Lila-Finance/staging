@@ -117,7 +117,8 @@ export const MarketDataProvider = ({ children }) => {
       let proxy_name = newMarketContents[item].proxy_name;
       let proxy_address = address.proxies[proxy_name];
       let value = await getProxyTVL(proxy_address);
-      let sumTVL = to10DecUSD(value, newMarketContents[item].coinName.toLowerCase())/BigInt(10000);
+      
+      let sumTVL = await to10DecUSD(value, newMarketContents[item].coinName.toLowerCase())/BigInt(10000);
       newMarketContents[item].value = toTVLString(sumTVL);
     }
     setMarketContents(newMarketContents);
@@ -125,7 +126,6 @@ export const MarketDataProvider = ({ children }) => {
 
   useEffect(() => {
     getTVLs();
-    
 
     const interval = setInterval(() => {
       getTVLs();
@@ -136,10 +136,11 @@ export const MarketDataProvider = ({ children }) => {
 
   const coinNameToColor = (coinName) => {
     for (const item of marketContentsTemplate) {
-      if (item.coinName === coinName) {
+      if (item.coinName.toLowerCase() === coinName.toLowerCase()) {
         return item.topBg;
       }
     }
+    
     return '#FFFFFF'; 
   };
 

@@ -92,12 +92,14 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
           }
           ],
       };
+      
       const domain = {
-          name: coinName,
+          name: coinName.toUpperCase(),
           version: "1",
           chainId: 11155111,
           verifyingContract: address.assets[coinName.toLowerCase()],
       };
+
       const signature = await signTypedData({
           domain,
           message,

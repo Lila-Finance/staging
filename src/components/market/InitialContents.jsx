@@ -4,7 +4,7 @@ import { useState, useContext } from "react";
 const InitialContents = ({ setSelectedAsset, selectedAsset }) => {
   const { marketContents } = useContext(MarketDataContext);
   const [isVisible, setIsVisible] = useState(true);
-
+  
   return (
     <div>
         {selectedAsset == -1 ?  

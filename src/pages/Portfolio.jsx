@@ -95,7 +95,7 @@ const Portfolio = () => {
       
       new_deposit = {
         ...new_deposit,
-        amount: to10DecUSD(value, token),
+        amount: await to10DecUSD(value, token),
         rate: Number(numerator)/100000,
         strategy: pool['strategy'],
         duration: pool['duration'],

@@ -51,7 +51,7 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
     for(let position in positions){
       const rate = BigInt((positions[position]['rate']*((Number(Date.now()/1000)-Number(positions[position]['blockTimestamp']))/6/6/24/365)*100000000).toFixed(0));
       const val = positions[position]['amount']*rate;
-      const interest = val/BigInt(10000000000);
+      const interest = val/BigInt(100000000000);
       sumNetWorth += positions[position]['amount'] + interest;
     }
     setNetWorth(sumNetWorth);

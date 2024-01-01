@@ -24,7 +24,7 @@ const MaturedPosition = ({expiredPositions, connected}) => {
       const asset = address.asset_addresses[pos['asset']].toUpperCase();
       const duration = Number(positions[position]['duration']);
       const rate = (Number(positions[position]['rate'])*10).toFixed(2);
-      const interest = (positions[position]['amount']*(BigInt(positions[position]['rate']*1000000)))/BigInt(1000000*duration);
+      const interest = (positions[position]['amount']*(BigInt(positions[position]['rate']*1000000)))/BigInt(10000000*duration);
 
       const blockTimestamp = Number(pos['blockTimestamp']);
       const endDate = new Date((blockTimestamp+duration*(30*24*60*60))*1000);

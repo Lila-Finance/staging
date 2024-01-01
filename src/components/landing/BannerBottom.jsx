@@ -33,7 +33,7 @@ const BannerBottom = () => {
       let proxy_address = address.proxies[proxy];
       let value = await getProxyTVL(proxy_address);
       let token = proxy.split('_')[0];
-      sumTVL += to10DecUSD(value, token);
+      sumTVL += await to10DecUSD(value, token);
     }
     setTotalTVL(sumTVL);
   };
