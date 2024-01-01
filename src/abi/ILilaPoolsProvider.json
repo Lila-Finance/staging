@@ -91,6 +91,12 @@
           "internalType": "uint32",
           "name": "duration",
           "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "rateIndex",
+          "type": "uint32"
         }
       ],
       "name": "PoolUpdated",
@@ -116,6 +122,12 @@
           "internalType": "uint256",
           "name": "claimedPeriod",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "who",
+          "type": "address"
         }
       ],
       "name": "RewardClaimed",

@@ -14,14 +14,14 @@
         },
         {
           "indexed": false,
-          "internalType": "uint64",
-          "name": "day",
-          "type": "uint64"
+          "internalType": "uint32",
+          "name": "duration",
+          "type": "uint32"
         },
         {
           "indexed": false,
           "internalType": "uint32",
-          "name": "count",
+          "name": "rateIndex",
           "type": "uint32"
         },
         {
@@ -42,13 +42,13 @@
           "type": "address"
         },
         {
-          "internalType": "uint64",
-          "name": "day",
-          "type": "uint64"
+          "internalType": "uint32",
+          "name": "duration",
+          "type": "uint32"
         },
         {
           "internalType": "uint32",
-          "name": "count",
+          "name": "rateIndex",
           "type": "uint32"
         }
       ],
@@ -90,13 +90,13 @@
           "type": "address"
         },
         {
-          "internalType": "uint64",
-          "name": "day",
-          "type": "uint64"
+          "internalType": "uint32",
+          "name": "duration",
+          "type": "uint32"
         },
         {
           "internalType": "uint32",
-          "name": "count",
+          "name": "rateIndex",
           "type": "uint32"
         },
         {

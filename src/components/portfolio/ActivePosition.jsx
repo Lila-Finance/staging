@@ -1,64 +1,57 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { MarketDataContext } from '../../constants/MarketDataProvider';
+import address from "../../data/address.json";
 
-const ActivePosition = () => {
-  const activePostions = [
-    {
-      id: 1,
-      topBg: "#2774CA",
-      title: "USDC",
-      deposit: "10000.00",
-      parcent: "4.00%",
-      month: "33",
-      coinName: "AAVE V3",
-      timeline: "Six Months",
-      expire: "Jan. 20, 2024",
-    },
-    {
-      id: 2,
-      topBg: "#000",
-      title: "FRAX",
-      deposit: "10000.00",
-      parcent: "4.00%",
-      month: "33",
-      coinName: "AAVE V3",
-      timeline: "Six Months",
-      expire: "Jan. 20, 2024",
-    },
-    {
-      id: 3,
-      topBg: "#26A17B",
-      title: "USDT",
-      deposit: "10000.00",
-      parcent: "4.00%",
-      month: "33",
-      coinName: "AAVE V3",
-      timeline: "Six Months",
-      expire: "Jan. 20, 2024",
-    },
-    {
-      id: 5,
-      topBg: "#48CBD9",
-      title: "ETH",
-      deposit: "10000.00",
-      parcent: "4.00%",
-      month: "33",
-      coinName: "AAVE V3",
-      timeline: "Six Months",
-      expire: "Jan. 20, 2024",
-    },
-    {
-      id: 6,
-      topBg: "#F4B731",
-      title: "DAI",
-      deposit: "10000.00",
-      parcent: "4.00%",
-      month: "33",
-      coinName: "AAVE V3",
-      timeline: "Six Months",
-      expire: "Jan. 20, 2024",
-    },
-  ];
+const ActivePosition = ({activePositions, connected}) => {
+  const { coinNameToColor } = useContext(MarketDataContext);
 
+  const [activePostions, setActivePostions] = useState([]);
+
+  const toBigIntString = (value) => {
+    let strValue = value.toString();
+    strValue = strValue.padStart(2, '0')
+    strValue = strValue.slice(0, -10) + '.' + strValue.slice(-10, -8);
+    return strValue
+
+  }
+
+  const setPositions = async (positions) => {
+    let newPositions = [];
+    for(let position in positions){
+      const pos = positions[position];
+      
+      const asset = address.asset_addresses[pos['asset']].toUpperCase();
+      const duration = Number(positions[position]['duration']);
+      const rate = (Number(positions[position]['rate'])*10).toFixed(2);
+      const interest = (positions[position]['amount']*(BigInt(positions[position]['rate']*1000000)))/BigInt(1000000*duration);
+
+      const blockTimestamp = Number(pos['blockTimestamp']);
+      const endDate = new Date((blockTimestamp+duration*(30*24*60*60))*1000);
+      const formattedDate = endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+      const newPosition = {
+        id: position,
+        topBg: coinNameToColor(asset),
+        title: asset,
+        deposit: toBigIntString(pos['amount']),
+        parcent: `${rate}%`,
+        month: toBigIntString(interest),
+        coinName: "AAVE V3",
+        timeline: `${duration*30} Day`,
+        //endDate
+        expire: formattedDate,
+      }
+      newPositions.push(newPosition)
+    }
+    setActivePostions(newPositions);
+  }
+
+  useEffect(() => {
+    setPositions(activePositions);
+  }, [activePositions]);
+
+  
   return (
     <div className="pt-6">
       {/* heading */}
@@ -136,7 +129,7 @@ const ActivePosition = () => {
           })}
 
           <div className="flex items-center justify-center">
-            <Link to="/">
+            <Link to="/market">
               <div className="bg-[#FF1E1E] w-[100px] h-[100px] flex items-center justify-center">
                 <p className="text-white">Add more</p>
               </div>

@@ -85,7 +85,7 @@ export const MarketDataProvider = ({ children }) => {
   const toTVLString = (value) => {
     let strValue = value.toString();
 
-    strValue = strValue.padStart(10, '0');
+    strValue = strValue.padStart(7, '0');
 
     strValue = strValue.slice(0, -6) + '.' + strValue.slice(-6);
 
@@ -134,10 +134,17 @@ export const MarketDataProvider = ({ children }) => {
       return () => clearInterval(interval);
   }, []);
 
-
+  const coinNameToColor = (coinName) => {
+    for (const item of marketContentsTemplate) {
+      if (item.coinName === coinName) {
+        return item.topBg;
+      }
+    }
+    return '#FFFFFF'; 
+  };
 
   return (
-    <MarketDataContext.Provider value={{ marketContents }}>
+    <MarketDataContext.Provider value={{ marketContents, coinNameToColor }}>
       {children}
     </MarketDataContext.Provider>
   );
