@@ -36,3 +36,16 @@ body {
   animation: floatOffScreenRight 4s ease-out;
 }
 
+
+.loading-line {
+  height: 2px;
+  background-color: black;
+  width: 0%;
+  animation: loadLine 8s linear forwards;
+}
+
+@keyframes loadLine {
+  to {
+      width: 100%;
+  }
+}

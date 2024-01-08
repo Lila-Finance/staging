@@ -59,6 +59,16 @@ const BannerBottom = () => {
     return `$${strValue}`;
   };
 
+  useEffect(() => {
+    // Set up an interval that runs every 4 seconds
+      const interval = setInterval(() => {
+          toggleFront(prevFront => (prevFront + 1) % 3); // Rotate within 0-2
+      }, 8000);
+
+      // Clean up the interval on component unmount
+      return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className=" pb-20">
       {/* Wrapper Start */}
@@ -77,7 +87,7 @@ const BannerBottom = () => {
         {/* Right side */}
         <div>
           {/* header */}
-          <div className="flex items-center gap-[91px] border-b border-b-black pb-1.5">
+          <div className="flex items-center gap-[91px] pb-1.5">
               <button onClick={() => toggleFront(0)}>
                   <p className={`text-base md:text-[17px] 2xl:text-lg ${front === 0 ? '' : 'opacity-50'}`}>
                       Deposit
@@ -94,6 +104,8 @@ const BannerBottom = () => {
                   </p>
               </button>
           </div>
+
+           <div key={front} className="loading-line"></div>
 
 
           {/* Content */}
