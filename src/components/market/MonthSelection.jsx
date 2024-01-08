@@ -71,7 +71,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
 
         return (
           <div
-            className="w-full bg-aaveBg pb-3.5 px-3.5 pt-8 text-end cursor-pointer hidden"
+            className="w-full bg-aaveBg pb-3.5 px-3.5 pt-8 text-end cursor-pointer"
             key={id}
             onClick={() => toggleDeposit(id)}
           >
