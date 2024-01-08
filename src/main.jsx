@@ -4,9 +4,9 @@ import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Market from "./pages/Market.jsx";
-import Docs from "./pages/Docs.jsx";
+import Faucet from "./pages/Faucet.jsx";
 import Portfolio from "./pages/Portfolio.jsx";
-
+import { MarketDataProvider } from "../src/constants/MarketDataProvider";
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   getDefaultWallets,
@@ -16,12 +16,15 @@ import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   mainnet,
   arbitrum,
+  sepolia,
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
+import { ExchangeRateProvider } from "./helpers/Converter.jsx";
+
 const { chains, publicClient } = configureChains(
-  [arbitrum],
+  [sepolia],
   [
     alchemyProvider({ apiKey: '2s-1F2BiWb0o7mA2LieeKX4j46A0YhM3' }),
     publicProvider()
@@ -54,17 +57,21 @@ const router = createBrowserRouter([
     element: <Portfolio />,
   },
   {
-    path: "/docs",
-    element: <Docs />,
+    path: "/faucet",
+    element: <Faucet />,
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains} modalSize="compact">
-        <RouterProvider router={router} />
-      </RainbowKitProvider>
-    </WagmiConfig>
-  </React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(  
+    <React.StrictMode>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={chains} modalSize="compact">
+        <ExchangeRateProvider>  
+          <MarketDataProvider>
+            <RouterProvider router={router} />
+          </MarketDataProvider>
+          </ExchangeRateProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </React.StrictMode>
 );

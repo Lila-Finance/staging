@@ -1,54 +1,79 @@
-const MonthSelection = ({ toggleDeposit }) => {
+import { MarketDataContext } from '../../constants/MarketDataProvider';
+import { useContext} from 'react';
+
+const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
   // data
+  const { marketContents } = useContext(MarketDataContext);
+  let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
+  const { bottomCoin, coinName, id, topBg, value, wallet } = globitem[0];
+  
+  if(globitem == undefined || globitem[0] == undefined || globitem[0]['rates'] == undefined){
+    return (
+      <div></div>
+    );
+  }
   const months = [
     {
+      id: 0,
+      title: "Ten Minutes",
+      content: `${globitem[0]['rates'][0]}%`,
+    },
+    {
       id: 1,
-      title: "One Month",
-      content: "a.bc%",
+      title: "Thirty Minutes",
+      content: `${globitem[0]['rates'][1]}%`,
     },
     {
       id: 2,
-      title: "Two Months",
-      content: "xy.z%",
-    },
-    {
-      id: 3,
-      title: "Six Months",
-      content: "ij.k%",
+      title: "Sixty Minutes",
+      content: `${globitem[0]['rates'][2]}%`,
     },
   ];
 
   return (
     <div className="grid md:grid-cols-4 lg:grid-cols-5 gap-5 items-end">
-      <div className="w-full cursor-pointer">
-        {/* top content */}
-        <div className="w-full pb-6 px-3.5 pt-4 bg-[#2774CA]">
-          <p className={`text-xl xl:text-[25px] text-white`}>USDC</p>
+      <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]" onClick={() => setSelectedAsset(-1)} key={10}>
+          {/* top content */}
+          <div
+            style={{backgroundColor: `${topBg}`}}
+            className="bg-aaveBg w-full pb-6 px-3.5 pt-4"
+          >
+            <p
+              className={`text-xl xl:text-[25px] ${
+                id === 3 || id === 7 ? "text-black" : "text-white"
+              }`}
+            >
+              {coinName}
+            </p>
 
-          <p className={`text-sm md:text-base xl:text-[17px] text-white`}>
-            a.bc% - x.yz%
-          </p>
-        </div>
+            <p
+              className={`text-sm md:text-base xl:text-[17px] ${
+                id === 3 || id === 7 ? "text-black" : "text-white"
+              }`}
+            >
+              {wallet}
+            </p>
+          </div>
 
-        {/* Bottom Content */}
-        <div className="w-full bg-aaveBg pb-3.5 px-3.5 pt-8 text-end">
-          {/* name */}
-          <p className="text-lg xl:text-xl text-white">AAVE V3</p>
-          {/* value */}
-          <p className="text-sm xl:text-[15px] text-white pt-1.5 roboto">
-            0000.000000000
-          </p>
-        </div>
+          {/* Bottom Content */}
+          <div className="w-full bg-aaveBg pb-3.5 px-3.5 pt-8 text-end">
+            {/* name */}
+            <p className="text-lg xl:text-xl text-white">{bottomCoin}</p>
+            {/* value */}
+            <p className="text-sm xl:text-[15px] text-white pt-1.5 roboto">
+              {value}
+            </p>
+          </div>
       </div>
-
+      
       {months?.map((item) => {
         const { content, id, title } = item;
 
         return (
           <div
-            className="w-full bg-aaveBg pb-3.5 px-3.5 pt-8 text-end cursor-pointer"
+            className="w-full bg-aaveBg pb-3.5 px-3.5 pt-8 text-end cursor-pointer hidden"
             key={id}
-            onClick={toggleDeposit}
+            onClick={() => toggleDeposit(id)}
           >
             {/* name */}
             <p className="text-lg xl:text-xl text-white">{title}</p>
@@ -59,6 +84,8 @@ const MonthSelection = ({ toggleDeposit }) => {
           </div>
         );
       })}
+      
+
     </div>
   );
 };

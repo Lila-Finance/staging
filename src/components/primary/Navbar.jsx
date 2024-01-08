@@ -1,13 +1,25 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Navbar = ({ launchApp }) => {
+  const history = useNavigate();
+  const location = useLocation();
+
+  const handleNavLinkClick = (target) => {
+    // Check if the target is the current route
+    if (location.pathname === target) {
+      // Refresh the page
+      history.go(0);
+    }
+  };
+
+
   // links
   const navLinks = [
     {
       id: 1,
-      title: "Market",
+      title: "Testnet Market",
       target: "/market",
     },
     {
@@ -17,8 +29,13 @@ const Navbar = ({ launchApp }) => {
     },
     {
       id: 3,
+      title: "Faucet",
+      target: "/faucet",
+    },
+    {
+      id: 4,
       title: "Docs",
-      target: "/docs",
+      target: "https://lila-finance.gitbook.io/lila-documentation/getting-started-with-cryptocurrency/what-is-decentralized-finance",
     },
   ];
 
@@ -38,13 +55,12 @@ const Navbar = ({ launchApp }) => {
           {/* title */}
           <div className="md:block hidden">
             <div className="flex items-center gap-14">
-              {navLinks?.map((item) => (
+                            {navLinks?.map((item) => (
                 <NavLink
                   key={item.id}
                   to={item.target}
-                  className={
-                    "text-sm md:text-base xl:text-lg hover:translate-y-2 duration-300"
-                  }
+                  className="text-sm md:text-base xl:text-lg"
+                  onClick={() => handleNavLinkClick(item.target)}
                 >
                   {item.title}
                 </NavLink>
