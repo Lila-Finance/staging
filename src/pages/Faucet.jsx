@@ -1,52 +1,87 @@
-import { useState } from "react";
-import InitialContents from "../components/market/InitialContents";
-import MonthSelection from "../components/market/MonthSelection";
-import DepositContent from "../components/market/DepositContent";
-import DepositAmountContent from "../components/market/DepositAmountContent";
-import AssetProcotolTopContent from "../components/market/AssetProcotolTopContent";
+import { useState, useContext, useEffect } from "react";
+import FaucetContents from "../components/faucet/FaucetContents";
 import Navbar from "../components/primary/Navbar";
 import { ScrollRestoration } from "react-router-dom";
+import { MarketDataContext } from '../constants/MarketDataProvider';
+import address from '../data/address.json';
+import { ExchangeRateContext } from '../helpers/Converter';
+import IERC20 from "../abi/IERC20Permit.json";
+import IFaucet from "../abi/IFaucet.json";
+import {useContractWrite} from "wagmi";
 
 const Faucet = () => {
-  const [initialContent, setInitialContent] = useState(true);
+  const { publicClient, to10Dec, userAddress, FivDecBigIntToFull } = useContext(ExchangeRateContext);
+  const { marketContents } = useContext(MarketDataContext);
+  const [cMarketContents, setCMarketContents] = useState(marketContents);
+  
 
-  // Month selection state
-  const [monthSelection, setMonthSelection] = useState(false);
+  const toTVLString = (value) => {
+    let strValue = value.toString();
 
-  const [selectedAsset, setSelectedAsset] = useState(-1);
+    strValue = strValue.padStart(11, '0');
 
+    strValue = strValue.slice(0, -10) + '.' + strValue.slice(-10, -4);
+
+    return strValue;
+  };
+
+  const [FaucetArgs, setFaucetArgs] = useState([]);
+    const { write: FaucetCall } = useContractWrite({
+        address: address.core.faucet_address,
+        abi: IFaucet.abi,
+        functionName: "mint",
+        args: FaucetArgs,
+    });
 
   const setSelectedAssetM = (ni) => {
-    setSelectedAsset(ni);
-    setMonthSelection(ni != -1);
-    if(ni == -1) setMakeDeposit(false);
-    if(ni == -1) setEnterDeposit(false);
+    FaucetCall();
   };
 
-  // Deposit content
-  const [makeDeposit, setMakeDeposit] = useState(false);
-  const [enterDeposit, setEnterDeposit] = useState(false);
-  const [deposit, setDeposit] = useState(false);
-  const [finalize, setFinalize] = useState(false);
+  const Faucet = async (token) => {
+      const amount = token=="wbtc" ? FivDecBigIntToFull(BigInt("50000"), token) : FivDecBigIntToFull(BigInt("100000000"), token)
+      console.log([address.assets[token], userAddress, amount]);
+      setFaucetArgs([address.assets[token], userAddress, amount]);
+  }
 
-  const showAmountScreen = () => {
-    setEnterDeposit(true);
-    setMonthSelection(false);
+  const getUserBalance = async (tokenAddress) => {
+      if (publicClient && userAddress != undefined) {
+          const BALANCE = await publicClient.readContract({
+              address: tokenAddress,
+              abi: IERC20.abi,
+              functionName: "balanceOf",
+              args: [userAddress],
+          });
+          return (BigInt(BALANCE.toString()));
+      }            
   };
-  const showDepositScreen = () => {
-    setEnterDeposit(false);
-    setMakeDeposit(true);
-  };
-  const showDepositValue = () => {
-    // setMakeDeposit(false);
-    setDeposit(true);
-  };
-  const showFinalizedScreen = () => {
-    // setMakeDeposit(false);
-    setDeposit(false);
-    setFinalize(true);
-  };
+
+  const updateMarketContents = async () => {
+    if (!userAddress) {
+      setCMarketContents(marketContents);
+      return;
+    }
   
+    // Assuming marketContents is an array of objects
+    let promises = marketContents.map((marketItem, index) => {
+      const token = marketItem.coinName.toLowerCase();
+      return getUserBalance(address.assets[token])
+        .then(async v => {
+          const ten = await to10Dec(v, token);
+          const value = toTVLString(ten);
+          return { ...marketItem, value: value };
+        });
+    });
+  
+    // Wait for all promises to resolve and update the newMarket array
+    const newMarket = await Promise.all(promises);
+    setCMarketContents(newMarket);
+  };
+   
+
+  useEffect(() => {
+    updateMarketContents();
+    
+  }, [userAddress, marketContents]); 
 
   return (
     <div className="w-full pb-10">
@@ -54,14 +89,7 @@ const Faucet = () => {
       <Navbar />
       
       <div className="w-full 2xl:max-w-7xl 3xl:max-w-[1400px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24">
-        {/* INitial Content */}        
-        {<InitialContents selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM} />}
-
-        {/* DepositContent */}
-        {enterDeposit && <DepositAmountContent toggleDeposit={showDepositScreen} selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM}/>}
-
-        {/* DepositContent
-        {makeDeposit && <DepositContent selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM} deposit={deposit} finalize={finalize} setDeposit={showDepositValue} setFinalize={showFinalizedScreen}/>} */}
+        {<FaucetContents Faucet={Faucet} marketContents={cMarketContents} setSelectedAsset={setSelectedAssetM} />}
       </div>
     </div>
   );

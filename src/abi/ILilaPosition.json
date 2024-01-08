@@ -176,7 +176,7 @@
             },
             {
               "internalType": "uint64",
-              "name": "claimedPeriod",
+              "name": "claimedPayments",
               "type": "uint64"
             },
             {
@@ -243,7 +243,7 @@
             },
             {
               "internalType": "uint64",
-              "name": "claimedPeriod",
+              "name": "claimedPayments",
               "type": "uint64"
             },
             {

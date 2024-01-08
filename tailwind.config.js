@@ -13,7 +13,17 @@ export default {
         depositBg: "rgba(255, 201, 201, 0.50)",
         portfolioBottomBg: "#830707",
       },
+      keyframes: {
+        slideIn: {
+          '0%': { marginLeft: '-100px' },
+          '100%': { marginLeft: '25px' },
+        },
+      },
+      animation: {
+        slideIn: 'slideIn 0.5s forwards',
+      },
     },
+  
   },
   plugins: [],
 };

@@ -15,7 +15,7 @@
         {
           "indexed": false,
           "internalType": "uint32",
-          "name": "duration",
+          "name": "totalPayments",
           "type": "uint32"
         },
         {
@@ -43,7 +43,7 @@
         },
         {
           "internalType": "uint32",
-          "name": "duration",
+          "name": "totalPayments",
           "type": "uint32"
         },
         {
@@ -91,7 +91,7 @@
         },
         {
           "internalType": "uint32",
-          "name": "duration",
+          "name": "totalPayments",
           "type": "uint32"
         },
         {

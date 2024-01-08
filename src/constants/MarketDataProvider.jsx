@@ -51,22 +51,22 @@ const marketContentsTemplate = [
     proxy_name: 'wbtc_aave_proxy',
     pool_index: [9, 10, 11]
   },
-  {
-    id: 4,
-    coinName: "wETH",
-    wallet: "a.bc% - x.yz%",
-    topBg: "#48CBD9",
-    bottomCoin: "AAVE V3",
-    value: "0000.000000000",
-    proxy_name: 'weth_aave_proxy',
-    pool_index: [12, 13, 14]
-  },
+  // {
+  //   id: 4,
+  //   coinName: "wETH",
+  //   wallet: "a.bc% - x.yz%",
+  //   topBg: "#48CBD9",
+  //   bottomCoin: "AAVE V3",
+  //   value: "0000.000000000",
+  //   proxy_name: 'weth_aave_proxy',
+  //   pool_index: [12, 13, 14]
+  // },
 ];
 
 export const MarketDataProvider = ({ children }) => {
   const [marketContents, setMarketContents] = useState(marketContentsTemplate);
 
-  const { publicClient, to10DecUSD } = useContext(ExchangeRateContext);
+  const { publicClient, to10Dec } = useContext(ExchangeRateContext);
 
   const getProxyTVL = async (proxyAddress) => {
     if (publicClient) {
@@ -118,7 +118,7 @@ export const MarketDataProvider = ({ children }) => {
       let proxy_address = address.proxies[proxy_name];
       let value = await getProxyTVL(proxy_address);
       
-      let sumTVL = await to10DecUSD(value, newMarketContents[item].coinName.toLowerCase())/BigInt(10000);
+      let sumTVL = await to10Dec(value, newMarketContents[item].coinName.toLowerCase())/BigInt(10000);
       newMarketContents[item].value = toTVLString(sumTVL);
     }
     setMarketContents(newMarketContents);
@@ -135,6 +135,7 @@ export const MarketDataProvider = ({ children }) => {
   }, []);
 
   const coinNameToColor = (coinName) => {
+    console.log(coinName);
     for (const item of marketContentsTemplate) {
       if (item.coinName.toLowerCase() === coinName.toLowerCase()) {
         return item.topBg;

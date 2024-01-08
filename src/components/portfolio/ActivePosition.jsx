@@ -10,8 +10,8 @@ const ActivePosition = ({activePositions, connected}) => {
 
   const toBigIntString = (value) => {
     let strValue = value.toString();
-    strValue = strValue.padStart(2, '0')
-    strValue = strValue.slice(0, -10) + '.' + strValue.slice(-10, -8);
+    strValue = strValue.padStart(11, '0')
+    strValue = strValue.slice(0, -10) + '.' + strValue.slice(-10, -7);
     return strValue
 
   }
@@ -21,25 +21,24 @@ const ActivePosition = ({activePositions, connected}) => {
     for(let position in positions){
       const pos = positions[position];
       
-      const asset = address.asset_addresses[pos['asset']].toUpperCase();
-      const duration = Number(positions[position]['duration']);
-      const rate = (Number(positions[position]['rate'])*10).toFixed(2);
-      const interest = (positions[position]['amount']*(BigInt(positions[position]['rate']*1000000)))/BigInt(10000000*duration);
-
-      const blockTimestamp = Number(pos['blockTimestamp']);
-      const endDate = new Date((blockTimestamp+duration*(30*24*60*60))*1000);
+      const asset = address.asset_addresses[pos.pool.asset.toLowerCase()].toUpperCase();
+      const duration = Number(pos.pool.totalPayments);
+      const rate = Number(pos.rate*(BigInt((365*24*60*60)/600)))/1000000000;
+      
+      const interest = (pos.amount*pos.rate/BigInt(100000000000));
+      const endDate = new Date((Number(pos.position.startTime)+duration*Number(pos.pool.payoutFrequency))*1000);
+      
       const formattedDate = endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
       const newPosition = {
         id: position,
         topBg: coinNameToColor(asset),
         title: asset,
-        deposit: toBigIntString(pos['amount']),
+        deposit: toBigIntString(pos.amount),
         parcent: `${rate}%`,
         month: toBigIntString(interest),
         coinName: "AAVE V3",
-        timeline: `${duration*30} Day`,
-        //endDate
+        timeline: `${duration*10} Minute`,
         expire: formattedDate,
       }
       newPositions.push(newPosition)
@@ -104,7 +103,7 @@ const ActivePosition = ({activePositions, connected}) => {
 
                     {/* month */}
                     <p className="text-[13px] md:text-[15px] text-white pt-2.5">
-                      {month} per Mo.
+                      {month} per 10 Min.
                     </p>
                   </div>
                 </div>

@@ -15,17 +15,17 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
   const months = [
     {
       id: 0,
-      title: "One Month",
+      title: "Ten Minutes",
       content: `${globitem[0]['rates'][0]}%`,
     },
     {
       id: 1,
-      title: "Three Month",
+      title: "Thirty Minutes",
       content: `${globitem[0]['rates'][1]}%`,
     },
     {
       id: 2,
-      title: "Six Month",
+      title: "Sixty Minutes",
       content: `${globitem[0]['rates'][2]}%`,
     },
   ];
@@ -65,13 +65,13 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
             </p>
           </div>
       </div>
-
+      
       {months?.map((item) => {
         const { content, id, title } = item;
 
         return (
           <div
-            className="w-full bg-aaveBg pb-3.5 px-3.5 pt-8 text-end cursor-pointer"
+            className="w-full bg-aaveBg pb-3.5 px-3.5 pt-8 text-end cursor-pointer hidden"
             key={id}
             onClick={() => toggleDeposit(id)}
           >
@@ -84,6 +84,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
           </div>
         );
       })}
+      
 
     </div>
   );

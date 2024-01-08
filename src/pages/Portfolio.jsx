@@ -8,141 +8,161 @@ import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 import { useState , useEffect, useContext} from "react";
 import { ExchangeRateContext } from '../helpers/Converter';
 
+import LilaPoolsProvider from "../abi/LilaPoolsProvider.json";
 import ILilaOracle from "../abi/ILilaOracle.json";
+import ILilaPosition from "../abi/ILilaPosition.json";
 import address from "../data/address.json";
-
-const APIURL = 'https://api.studio.thegraph.com/query/62005/lilafinancestaging/version/latest';
-
-const Query = (address) => {return `
-  query {
-    deposits(first: 1000, where: { owner: "${address}"}, orderBy: tokenID, orderDirection: asc) {
-     tokenID
-     asset
-     amount
-     poolId
-     blockTimestamp
-   }
- }`;}
-const PoolQuery = (index) => {return `
-query {
-  poolUpdateds(first: 1, where: {index: ${index}}, orderBy: blockTimestamp, orderDirection: asc) {
-     index
-     strategy
-     asset
-     frequency
-     duration
-     rateIndex
-     blockTimestamp
- }
-}`;}
-const WithdrawQuery = (tokenId) => {return `
-        query {
-          withdrawals(first: 1, where: { tokenID: "${tokenId}" }) {
-          blockTimestamp
-        }
-        }
-`;}
-const RewardQuery = (tokenId) => {return `
-      query {
-          rewardClaimeds(first: 100, where: {tokenID: ${tokenId}}) {
-               tokenID
-               reward
-               claimedPeriod
-      }
-  }
-`;}
 
 const Portfolio = () => {
 
-  const { publicClient, to10DecUSD, userAddress } = useContext(ExchangeRateContext);
+  const { publicClient, to10DecUSD, userAddress, toTokenFromAddress } = useContext(ExchangeRateContext);
 
   const [activePositions, setActivePositions] = useState([]);
   const [expiredPositions, setExpiredPositions] = useState([]);
   const [connected, setConnected] = useState(false);
 
-  const client = new ApolloClient({
-    uri: APIURL,
-    cache: new InMemoryCache(),
-  })
 
-  const DepositToPosition = async (deposit, deposits) => {
-      let new_deposit = deposits[deposit];
-
-      const pooldata = (await client.query({ query: gql(PoolQuery(new_deposit['poolId']))}))['data'];
-      const value = BigInt(new_deposit['amount']);
-      const token = address['asset_addresses'][new_deposit['asset'].toLowerCase()];
-
-      const pool = pooldata['poolUpdateds'][0];
-      const strategy = pool['strategy'].toString();
-      const duration = Number(pool['duration'])
-      const rateIndex = Number(pool['rateIndex'])
+  // const DepositToPosition = async (deposit, deposits) => {
+  //     let new_deposit = deposits[deposit];
       
-      const key = (await publicClient.readContract({
+  //     const pooldata = (await client.query({ query: gql(PoolQuery(new_deposit['poolId']))}))['data'];
+  //     const value = BigInt(new_deposit['amount']);
+  //     const token = address['asset_addresses'][new_deposit['asset'].toLowerCase()];
+
+  //     const pool = pooldata['poolUpdateds'][0];
+  //     const strategy = pool['strategy'].toString();
+  //     const duration = Number(pool['duration'])
+  //     const rateIndex = Number(pool['rateIndex'])
+      
+  //     const key = (await publicClient.readContract({
+  //       address: address.core.oracle_address,
+  //       abi: ILilaOracle.abi,
+  //       functionName: "getKey",
+  //       args: [strategy, duration, rateIndex],
+  //     }));
+
+  //     const numerator = (await publicClient.readContract({
+  //       address: address.core.oracle_address,
+  //       abi: ILilaOracle.abi,
+  //       functionName: "getNumerator",
+  //       args: [key],
+  //     }));
+
+  //     const rewardsdata = (await client.query({ query: gql(RewardQuery(new_deposit['tokenID']))}))['data'];
+      
+  //     new_deposit = {
+  //       ...new_deposit,
+  //       amount: await to10DecUSD(value, token),
+  //       rate: Number(numerator)/100000,
+  //       strategy: pool['strategy'],
+  //       frequency: pool['frequency'],
+  //       duration: pool['duration'],
+  //       rewardsData: rewardsdata['rewardClaimeds'],
+  //     }
+  //     console.log(new_deposit)
+  //     return new_deposit;
+  // }
+
+  const DataToPositions = async (user_address) => {
+
+    // const deposits = data['data']['deposits'];
+    let active_positions = [];
+    let expired_positions = [];
+    
+    const positionsCount = (await publicClient.readContract({
+      address: address.core.position_address,
+      abi: ILilaPosition.abi,
+      functionName: "balanceOf",
+      args: [user_address],
+    }));
+
+    const count = Number(positionsCount);
+
+    let list = Array.from({ length: count }, (_, i) => i);
+
+    // Create an array of promises
+    const promises = Object.keys(list).map(async (index) => {
+      
+      const tokenID = (await publicClient.readContract({
+        address: address.core.position_address,
+        abi: ILilaPosition.abi,
+        functionName: "tokenOfOwnerByIndex",
+        args: [user_address, index],
+      }));
+
+      const Position = (await publicClient.readContract({
+        address: address.core.position_address,
+        abi: ILilaPosition.abi,
+        functionName: "getPosition",
+        args: [tokenID],
+      }));
+
+      const Pool_ = (await publicClient.readContract({
+        address: address.core.poolprovider_address,
+        abi: LilaPoolsProvider.abi,
+        functionName: "poolList",
+        args: [Position['poolId']],
+      }));
+      const Pool ={
+        maxAmount: Pool_[0],
+        strategy: Pool_[1],
+        asset: Pool_[2],
+        payoutFrequency: Pool_[3],
+        totalPayments: Pool_[4],
+        rateIndex: Pool_[5],
+      }
+
+      const rateKey = (await publicClient.readContract({
         address: address.core.oracle_address,
         abi: ILilaOracle.abi,
         functionName: "getKey",
-        args: [strategy, duration, rateIndex],
+        args: [Pool.strategy, Pool.totalPayments, Position['rateIndex']],
       }));
 
-      const numerator = (await publicClient.readContract({
+      const rate = (await publicClient.readContract({
         address: address.core.oracle_address,
         abi: ILilaOracle.abi,
         functionName: "getNumerator",
-        args: [key],
+        args: [rateKey],
       }));
+      const amount = await to10DecUSD(Position.amount, toTokenFromAddress(Pool.asset));
 
-      const rewardsdata = (await client.query({ query: gql(RewardQuery(new_deposit['tokenID']))}))['data'];
+      const matured_ = Position['claimedPayments'] ==  Pool['totalPayments'];
       
-      new_deposit = {
-        ...new_deposit,
-        amount: await to10DecUSD(value, token),
-        rate: Number(numerator)/100000,
-        strategy: pool['strategy'],
-        duration: pool['duration'],
-        blockTimestamp: pool['blockTimestamp'],
-        rewardsData: rewardsdata['rewardClaimeds'],
+      const result = {position: Position, 
+        pool: Pool, 
+        rate: rate, 
+        amount: amount, 
+        matured: matured_,
+        tokenID: tokenID
       }
-      return new_deposit;
-  }
 
-  const DataToPositions = async (data) => {
-    const deposits = data['data']['deposits'];
-    let active_positions = [];
-    let expired_positions = [];
-  
-    // Create an array of promises
-    const promises = Object.keys(deposits).map(async (depositKey) => {
-      let new_deposit = await DepositToPosition(depositKey, deposits);
-      const withdata = (await client.query({ query: gql(WithdrawQuery(deposits[depositKey]['tokenID']))}))['data'];
-      
-      if(withdata['withdrawals'].length == 0){
-        return { type: 'active', position: new_deposit };
-      } else {
-        return { type: 'expired', position: new_deposit };
-      }
+      return result;
+
     });
   
-    // Wait for all promises to resolve
+    // // Wait for all promises to resolve
     const results = await Promise.all(promises);
   
-    // Separate the results into active and expired positions
+    // // Separate the results into active and expired positions
     results.forEach(result => {
-      if (result.type === 'active') {
-        active_positions.push(result.position);
+      if (!result.matured) {
+        active_positions.push(result);
       } else {
-        expired_positions.push(result.position);
+        expired_positions.push(result);
       }
     });
   
     setActivePositions(active_positions);
     setExpiredPositions(expired_positions);
+    
   };
   
   
   useEffect(() => {
     if(userAddress){
-      client.query({ query: gql(Query(userAddress))}).then((data) => DataToPositions(data))
-    .catch((err) => { console.log('Error fetching data: ', err) })
+      // client.query({ query: gql(Query(userAddress))}).then((data) => DataToPositions(data))
+      DataToPositions(userAddress);
       setConnected(true);
     }else{
       setConnected(false);
