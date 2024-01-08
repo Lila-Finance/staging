@@ -20,12 +20,19 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
 
   const [done, setDone] = useState(false);
   const [depositArgs, setDepositArgs] = useState([]);
-  const { write: depositContract } = useContractWrite({
+  const [depositLoading, setDepositLoading] = useState(false);
+  const [animationKey, setAnimationKey] = useState(1); // state to force re-render
+
+  const { write: depositContractR } = useContractWrite({
         address: address.core.poolprovider_address,
         abi: ILilaPoolsProvider.abi,
         functionName: "deposit",
         args: depositArgs,
     });
+  const depositContract = async () => {
+    setDepositLoading(true);
+    depositContractR();
+  }
     
   const allowAmount = async () => {
 
@@ -122,6 +129,7 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
     listener(log) {
         if(!!log && !!log[0] && !!log[0].args && log[0].args["owner"] == userAddress){
           setDone(true);
+          setDepositLoading(false);
           setFinalize();
         }
     },
@@ -132,7 +140,7 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
 
   return (
     <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-5 items-end">
-      <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]" onClick={() => setSelectedAsset(-1)} key={10}>
+      <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]" onClick={() => setSelectedAsset(-1)} key={0}>
                 {/* top content */}
                 <div
                     style={{backgroundColor: `${topBg}`}}
@@ -176,7 +184,7 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
       {/* Deposit */}
       <div 
       onClick={() => !done && depositContract()}
-      className={`w-full ${(deposit && !finalize) ? "bg-[#FFC9C9]" : "bg-depositBg"} px-3.5 h-[105px] flex items-center justify-end cursor-pointer`}>
+      className={`w-full ${(deposit && !finalize) ? "bg-[#FFC9C9]" : "bg-depositBg"} px-3.5 h-[105px] flex items-center justify-end cursor-pointer z-10`}>
         <p className="text-lg xl:text-xl text-black">Deposit</p>
       </div>
 
@@ -188,6 +196,15 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
         </div>
       </NavLink>
       }
+
+      { depositLoading && 
+      <div 
+      key={animationKey}
+      className={`w-full bg-[#f6f6f6] px-3.5 h-[105px] flex items-center justify-end cursor-pointer animate-loadingslideIn z-0`}
+      onAnimationEnd={() => setAnimationKey(animationKey+1)}>
+      </div>
+      }
+      
     </div>
   );
 };

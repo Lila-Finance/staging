@@ -10,6 +10,7 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
   const { to10DecUSD } = useContext(ExchangeRateContext);
 
   const [withdrawArgs, setWithdrawArgs] = useState([]);
+  const [smallestPos, setSmallestPos] = useState(undefined);
   const { write: batchedWithdrawContract } = useContractWrite({
     address: address.core.poolprovider_address,
     abi: LilaPoolsProvider.abi,
@@ -46,8 +47,17 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
     const minutes = Math.floor((diff % hoursInMs) / minutesInMs);
     const seconds = Math.floor((diff % minutesInMs) / 1000);
   
-    // Format the string
-    return `${String(days).padStart(2, '0')}D ${String(hours).padStart(2, '0')}H ${String(minutes).padStart(2, '0')}M ${String(seconds).padStart(2, '0')}S`;
+    let timeString = '';
+
+    if (days > 0) {
+        timeString += `${String(days).padStart(2, '0')}D `;
+    }
+    if (days > 0 || hours > 0) {
+        timeString += `${String(hours).padStart(2, '0')}H `;
+    }
+    timeString += `${String(minutes).padStart(2, '0')}M ${String(seconds).padStart(2, '0')}S`;
+    
+    return timeString;
   };
 
   const [netWorth, setNetWorth] = useState(BigInt(0));
@@ -130,6 +140,7 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
       }
 
       if(next_pay != null){
+        setSmallestPos(pos);
         setNextPay(next_pay);
       }      
   
@@ -160,7 +171,6 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
 
     for(let position in positions){
       const pos = positions[position];
-      console.log(pos);
       
       const freq = Number(pos.pool.payoutFrequency)
       const start = Number(pos.position.startTime)
@@ -190,9 +200,19 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
 
   useEffect(() => {
     const calculateNextPayoutInter = () => {
-      calculateNextPayout(activePositions);
+      if(smallestPos != undefined){
+        const date_now = Date.now()/1000;
+        const freq = Number(smallestPos.pool.payoutFrequency);
+        const start = Number(smallestPos.position.startTime);
+        const end_date = start + freq * smallestPos.pool.totalPayments;
+        const payouts_passed = (date_now-end_date)/freq;        
+        const ciel = Math.ceil(payouts_passed) - payouts_passed;
+        setNextPay(new Date((ciel*freq+date_now)*1000));    
+      }
     };
-    const intervalId = setInterval(calculateNextPayoutInter, 9000);
+    calculateNextPayout(activePositions);
+    
+    const intervalId = setInterval(calculateNextPayoutInter, 2000);
     return () => clearInterval(intervalId);
   }, []);
 

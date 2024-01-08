@@ -26,7 +26,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
             
             let strValue = newValue.toString();
         
-            strValue = strValue.padStart(13, '0');
+            strValue = strValue.padStart(6, '0');
         
             strValue = strValue.slice(0, -5) + '.' + strValue.slice(-5);
             
@@ -95,7 +95,9 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
                     style={{
                     backgroundColor: `${topBg}`,
                     }}
+                    onClick={() => inputRef.current.value = toBalanceString(balance)}
                     key={1}
+
                 >
                     {/* name */}
                     <p
@@ -115,7 +117,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
                     {toBalanceString(balance)}
                     </p>
                 </div>
-            
+
                 {/* AMOUNT */}
                 <div
                     className="w-full pb-3.5 px-3.5 pt-8 text-end cursor-pointer"

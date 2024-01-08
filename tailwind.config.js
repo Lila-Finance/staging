@@ -16,11 +16,12 @@ export default {
       keyframes: {
         slideIn: {
           '0%': { marginLeft: '-100px' },
-          '100%': { marginLeft: '25px' },
-        },
+          '100%': { marginLeft: '20px' },
+        },//ml-5
       },
       animation: {
-        slideIn: 'slideIn 0.5s forwards',
+        slideIn: 'slideIn .8s forwards',
+        loadingslideIn: 'slideIn 2s forwards',
       },
     },
   

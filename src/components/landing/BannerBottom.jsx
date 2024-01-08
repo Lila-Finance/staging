@@ -52,7 +52,7 @@ const BannerBottom = () => {
   const toTVLString = (value) => {
     let strValue = value.toString();
 
-    strValue = strValue.padStart(15, '0');
+    strValue = strValue.padStart(11, '0');
 
     strValue = strValue.slice(0, -10) + '.' + strValue.slice(-10);
 
