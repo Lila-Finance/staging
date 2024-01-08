@@ -36,13 +36,15 @@ const Footer = () => {
       {/* Wrapper Start */}
       <div className="flex items-center justify-between gap-4">
         {footerLinks?.map((item) => (
-          <Link
-            to={item.target}
+          <a
+            href={item.target}
             key={item.id}
+            target="_blank"
+            rel="noopener noreferrer" // important for security reasons when using target='_blank'
             className="text-sm md:text-lg lg:text-xl"
           >
             {item.title}
-          </Link>
+          </a>
         ))}
       </div>
       {/* Wrapper End */}

@@ -32,11 +32,6 @@ const Navbar = ({ launchApp }) => {
       title: "Faucet",
       target: "/faucet",
     },
-    {
-      id: 4,
-      title: "Docs",
-      target: "https://lila-finance.gitbook.io/lila-documentation/getting-started-with-cryptocurrency/what-is-decentralized-finance",
-    },
   ];
 
   const [walletConnected, setWalletConnected] = useState(false);
@@ -65,43 +60,20 @@ const Navbar = ({ launchApp }) => {
                   {item.title}
                 </NavLink>
               ))}
+              <a
+                href={"https://lila-finance.gitbook.io/lila-documentation/getting-started-with-cryptocurrency/what-is-decentralized-finance"}
+                key={4}
+                target="_blank"
+                rel="noopener noreferrer" // important for security reasons when using target='_blank'
+                className="text-sm md:text-lg lg:text-xl"
+              >
+                {"Docs"}
+              </a>
             </div>
           </div>
         </div>
         <ConnectButton></ConnectButton>
-        {/* right side */}
-        {/* {walletConnected === false ? (
-          <div className="md:w-auto w-6/12 flex items-center justify-end">
-            {launchApp === true ? (
-              <div>
-                <NavLink to="/market">
-                  <button className="bg-navButtonBg py-2 md:py-3 px-4 md:px-8 text-sm md:text-base xl:text-lg rounded hover:-translate-x-2 duration-300">
-                    Launch App
-                  </button>
-                </NavLink>
-              </div>
-            ) : (
-              <div onClick={() => setWalletConnected(true)}>
-                <button className="bg-navButtonBg py-2 md:py-3 px-4 md:px-8 text-sm md:text-base xl:text-lg rounded hover:-translate-x-2 duration-300">
-                  Connect
-                </button>
-              </div>
-            )}
-          </div>
-        ) : null}
-
-        {walletConnected === true ? (
-          <div className="flex items-center gap-[5px]">
-            <button className="bg-navButtonBg py-2 md:py-3 px-3 text-sm md:text-base xl:text-lg rounded">
-              Arbitrum
-            </button>
-            <button className="bg-navButtonBg py-2 md:py-3 px-3 text-sm md:text-base xl:text-lg rounded">
-              0xab...cd
-            </button>
-          </div>
-        ) : null} */}
       </div>
-      {/* Wrapper end */}
 
       <div className="md:hidden block">
         <div className="flex items-center justify-center gap-14 mt-4">
@@ -114,6 +86,15 @@ const Navbar = ({ launchApp }) => {
               {item.title}
             </NavLink>
           ))}
+          <a
+            href={"https://lila-finance.gitbook.io/lila-documentation/getting-started-with-cryptocurrency/what-is-decentralized-finance"}
+            key={4}
+            target="_blank"
+            rel="noopener noreferrer" // important for security reasons when using target='_blank'
+            className="text-sm md:text-lg lg:text-xl"
+          >
+            {"Docs"}
+          </a>
         </div>
       </div>
     </div>
