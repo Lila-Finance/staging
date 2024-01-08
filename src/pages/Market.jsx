@@ -5,7 +5,6 @@ import DepositContent from "../components/market/DepositContent";
 import DepositAmountContent from "../components/market/DepositAmountContent";
 import AssetProcotolTopContent from "../components/market/AssetProcotolTopContent";
 import Navbar from "../components/primary/Navbar";
-import { ScrollRestoration } from "react-router-dom";
 
 const Market = () => {
   const [initialContent, setInitialContent] = useState(true);
@@ -56,7 +55,6 @@ const Market = () => {
 
   return (
     <div className="w-full pb-10">
-      <ScrollRestoration />
       <Navbar />
       
       <div className="w-full 2xl:max-w-7xl 3xl:max-w-[1400px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24">

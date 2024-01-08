@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import FaucetContents from "../components/faucet/FaucetContents";
 import Navbar from "../components/primary/Navbar";
-import { ScrollRestoration } from "react-router-dom";
 import { MarketDataContext } from '../constants/MarketDataProvider';
 import address from '../data/address.json';
 import { ExchangeRateContext } from '../helpers/Converter';
@@ -85,7 +84,6 @@ const Faucet = () => {
 
   return (
     <div className="w-full pb-10">
-      <ScrollRestoration />
       <Navbar />
       
       <div className="w-full 2xl:max-w-7xl 3xl:max-w-[1400px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24">

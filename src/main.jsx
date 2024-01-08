@@ -1,13 +1,15 @@
+import { createRoot } from 'react-dom/client';
 import React from "react";
-import ReactDOM from "react-dom/client";
+import { HashRouter, Routes, Route } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 import App from "./App.jsx";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Market from "./pages/Market.jsx";
 import Faucet from "./pages/Faucet.jsx";
 import Portfolio from "./pages/Portfolio.jsx";
 import { MarketDataProvider } from "../src/constants/MarketDataProvider";
 import '@rainbow-me/rainbowkit/styles.css';
+
 import {
   getDefaultWallets,
   RainbowKitProvider,
@@ -43,32 +45,20 @@ const wagmiConfig = createConfig({
   publicClient
 })
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/market",
-    element: <Market />,
-  },
-  {
-    path: "/portfolio",
-    element: <Portfolio />,
-  },
-  {
-    path: "/faucet",
-    element: <Faucet />,
-  },
-]);
-
-ReactDOM.createRoot(document.getElementById("root")).render(  
+createRoot(document.getElementById("root")).render(  
     <React.StrictMode>
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains} modalSize="compact">
         <ExchangeRateProvider>  
           <MarketDataProvider>
-            <RouterProvider router={router} />
+            <HashRouter>
+                <Routes>
+                  <Route path="/" element={<App />} />
+                  <Route path="/market" element={<Market />} />
+                  <Route path="/portfolio" element={<Portfolio />} />
+                  <Route path="/faucet" element={<Faucet />} />
+                </Routes>
+              </HashRouter>
           </MarketDataProvider>
           </ExchangeRateProvider>
         </RainbowKitProvider>
