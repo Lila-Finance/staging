@@ -1,8 +1,9 @@
-const AssetProcotolTopContent = ({boolean}) => {
+const AssetProcotolTopContent = ({boolean, back}) => {
     return (
       <div className="flex gap-10 md:flex-row flex-col min-h-[192px] mb-10">
         {/* left side start */}
         
+        {!(boolean[0] || boolean[1] || boolean[2] || boolean[3]|| boolean[4]) && 
         <div
           className="min-h-[192px] min-w-[233.59px] cursor-pointer"
         >
@@ -37,6 +38,44 @@ const AssetProcotolTopContent = ({boolean}) => {
             </p>
           </div>
         </div>
+        }
+        {(boolean[0] || boolean[1] || boolean[2] || boolean[3]|| boolean[4]) && 
+        <div
+          className="min-h-[192px] min-w-[233.59px] cursor-pointer"
+          onClick={back}
+        >
+          <div className="w-full bg-white pb-3.5 px-3.5 pt-8 text-end">
+            {/* name */}
+            <p className="text-lg xl:text-xl text-white">{"Protocol"}</p>
+            {/* value */}
+            <p className="text-sm xl:text-[15px] text-white pt-1.5 roboto">
+              {"Lila Finance TVL"}
+            </p>
+          </div>
+          {/* top content */}
+          <div
+            className="bg-navButtonBg w-full pb-6 px-3.5 pt-4 "
+          >
+            <p
+              className={`text-xl xl:text-[25px] ${
+                "text-black"
+              }`}
+            >
+              {"Back"}
+            </p>
+
+            <p
+              className={`text-sm md:text-base xl:text-[17px] ${
+                "text-black"
+              }`}
+            >
+              
+            </p>
+          </div>
+
+          
+        </div>
+        }
         {/* left side end */}
   
         {/* right side start */}

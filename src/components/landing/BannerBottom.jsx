@@ -80,7 +80,7 @@ const BannerBottom = () => {
             {/* $00000.000000000000 */}
           </p>
           <p className="text-[15px] md:text-base 2xl:text-[17px] mt-2.5">
-            of liquidity locked into in Lila Finance
+            of liquidity locked in Lila Finance
           </p>
         </div>
 

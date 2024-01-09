@@ -15,7 +15,7 @@ import ILilaPoolsProvider from "../../abi/ILilaPoolsProvider.json";
 const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, setFinalize, finalize, amount, month }) => {
   const { marketContents } = useContext(MarketDataContext);
   let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
-  const { bottomCoin, coinName, id, topBg, value, wallet, pool_index } = globitem[0];
+  const { bottomCoin, coinName, id, topBg, value, wallet, pool_index, rates } = globitem[0];
   const { publicClient, userAddress, FivDecBigIntToFull } = useContext(ExchangeRateContext);
 
   const [done, setDone] = useState(false);
@@ -122,6 +122,12 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
       setDeposit();
   }
 
+  const convertBigInt = (amountv) => {
+    const amountStr = amountv.toString();
+    const decimalStr = amountStr.slice(0, -5) + "." + amountStr.slice(-5);
+    return decimalStr;
+  };
+
   useContractEvent({
     address: address.core.poolprovider_address,
     abi: ILilaPoolsProvider.abi,
@@ -159,7 +165,14 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
                         id === 3 || id === 7 ? "text-black" : "text-white"
                     }`}
                     >
-                    {wallet}
+                    {rates[month]}%
+                    </p>
+                    <p
+                    className={`text-sm text-right md:text-base xl:text-[17px] ${
+                        id === 3 || id === 7 ? "text-black" : "text-white"
+                    }`}
+                    >
+                    {convertBigInt(amount)}
                     </p>
                 </div>
 

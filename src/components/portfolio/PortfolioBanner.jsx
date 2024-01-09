@@ -154,12 +154,16 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
     let sumTotalEarnings = BigInt(0);
     for(let position in active){
       //TODO ADD ACTIVE INCOME
+      const pos = active[position];
+      const interest_per_ten = pos.amount * pos.rate;
+      const amount = interest_per_ten*BigInt(pos.position.claimedPayments)/BigInt(100000000000);
+      sumTotalEarnings+=amount;
     }
     for(let position in expired){
       const pos = expired[position];
       const interest_per_ten = pos.amount * pos.rate;
       const amount = interest_per_ten*BigInt(pos.pool.totalPayments)/BigInt(100000000000);
-      sumTotalEarnings+=amount+pos.amount;
+      sumTotalEarnings+=amount;
     }
     setTotalEarnings(sumTotalEarnings);
   }
@@ -199,22 +203,22 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
   }, [activePositions]);
 
   useEffect(() => {
-    const calculateNextPayoutInter = () => {
+    calculateNextPayout(activePositions);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
       if(smallestPos != undefined){
         const date_now = Date.now()/1000;
         const freq = Number(smallestPos.pool.payoutFrequency);
-        const start = Number(smallestPos.position.startTime);
-        const end_date = start + freq * smallestPos.pool.totalPayments;
-        const payouts_passed = (date_now-end_date)/freq;        
+        const payouts_passed = (date_now-(Number(smallestPos.position.startTime) + freq * smallestPos.pool.totalPayments))/freq;        
         const ciel = Math.ceil(payouts_passed) - payouts_passed;
         setNextPay(new Date((ciel*freq+date_now)*1000));    
       }
-    };
-    calculateNextPayout(activePositions);
-    
-    const intervalId = setInterval(calculateNextPayoutInter, 2000);
-    return () => clearInterval(intervalId);
-  }, []);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [smallestPos]);
 
   useEffect(() => {
     calculateTotalEarnings(activePositions, expiredPositions);

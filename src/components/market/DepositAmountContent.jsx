@@ -10,12 +10,12 @@ import { ExchangeRateContext } from "../../helpers/Converter";
 
 import address from "../../data/address.json";
 
-const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
+const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, rate }) => {
         // data
         const { publicClient, userAddress, to5DecValue } = useContext(ExchangeRateContext);
         const { marketContents } = useContext(MarketDataContext);
         let globitem = selectedAsset == -1 ? undefined : marketContents.filter(item => item.id == selectedAsset);
-        const { bottomCoin, coinName, id, topBg, value, wallet } = globitem[0];
+        const { bottomCoin, coinName, id, topBg, value, wallet, rates } = globitem[0];
         
         const [balance, setBalance] = useState(BigInt(0));
 
@@ -74,7 +74,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset }
                         id === 3 || id === 7 ? "text-black" : "text-white"
                     }`}
                     >
-                    {wallet}
+                    {rates[rate]}%
                     </p>
                 </div>
 

@@ -51,6 +51,11 @@ const Market = () => {
     setDeposit(false);
     setFinalize(true);
   };
+  const backFunction = () => {
+    if(monthSelection) setSelectedAssetM(-1);
+    if(enterDeposit) setSelectedAssetM(selectedAsset); setEnterDeposit(false);
+    if(makeDeposit) showAmountScreen(month); setMakeDeposit(false);
+  };
   
 
   return (
@@ -59,7 +64,7 @@ const Market = () => {
       
       <div className="w-full 2xl:max-w-7xl 3xl:max-w-[1400px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24">
         {/* INitial Content */}
-        {<AssetProcotolTopContent boolean={[monthSelection, enterDeposit, makeDeposit, deposit, finalize]}></AssetProcotolTopContent>}
+        {<AssetProcotolTopContent boolean={[monthSelection, enterDeposit, makeDeposit, deposit, finalize]} back={backFunction}></AssetProcotolTopContent>}
         
         {<InitialContents selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM} />}
 
@@ -67,7 +72,7 @@ const Market = () => {
         {monthSelection && <MonthSelection selectedAsset={selectedAsset} toggleDeposit={showAmountScreen} setSelectedAsset={setSelectedAssetM} />}
 
         {/* DepositContent */}
-        {enterDeposit && <DepositAmountContent toggleDeposit={showDepositScreen} selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM}/>}
+        {enterDeposit && <DepositAmountContent rate={month} toggleDeposit={showDepositScreen} selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM}/>}
 
         {/* DepositContent */}
         {makeDeposit && <DepositContent selectedAsset={selectedAsset} setSelectedAsset={setSelectedAssetM} deposit={deposit} finalize={finalize} setDeposit={showDepositValue} setFinalize={showFinalizedScreen} amount={amount} month={month}/>}
