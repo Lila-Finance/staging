@@ -4,16 +4,17 @@ import Navbar from "../components/primary/Navbar";
 import { MarketDataContext } from '../constants/MarketDataProvider';
 import address from '../data/address.json';
 import { ExchangeRateContext } from '../helpers/Converter';
-import IERC20 from "../abi/IERC20Permit.json";
+import IERC20 from "../abi/IERC20.json";
 import IFaucet from "../abi/IFaucet.json";
 import {useContractWrite} from "wagmi";
+import { useAccount } from 'wagmi'
 
 const Faucet = () => {
   const { publicClient, to10Dec, userAddress, FivDecBigIntToFull } = useContext(ExchangeRateContext);
   const { marketContents } = useContext(MarketDataContext);
   const [cMarketContents, setCMarketContents] = useState(marketContents);
+  const { connector } = useAccount();
   
-
   const toTVLString = (value) => {
     let strValue = value.toString();
 
@@ -31,14 +32,37 @@ const Faucet = () => {
         functionName: "mint",
         args: FaucetArgs,
     });
+    
+  const addToWallet = async (token) => {
+    const decimals = (await publicClient.readContract({
+      address: address.assets[token],
+      abi: IERC20.abi,
+      functionName: "decimals",
+      args: [],
+    })).toString();
+    
 
-  const setSelectedAssetM = (ni) => {
+    await window.ethereum.request({
+      "method": "wallet_watchAsset",
+      "params": {
+        "type": "ERC20",
+        "options": {
+          "address": address.assets[token],
+          "symbol": token.toUpperCase(),
+          "decimals": Number(decimals),
+          "image": ""
+        }
+      }
+    });    
+  }
+  
+  const setSelectedAssetM = async (ni) => {
     FaucetCall();
   };
 
   const Faucet = async (token) => {
       const amount = token=="wbtc" ? FivDecBigIntToFull(BigInt("50000"), token) : FivDecBigIntToFull(BigInt("100000000"), token)
-      // console.log([address.assets[token], userAddress, amount]);
+      console.log([address.assets[token], userAddress, amount]);
       setFaucetArgs([address.assets[token], userAddress, amount]);
   }
 
@@ -87,7 +111,7 @@ const Faucet = () => {
       <Navbar />
       
       <div className="w-full 2xl:max-w-7xl 3xl:max-w-[1400px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24">
-        {<FaucetContents Faucet={Faucet} marketContents={cMarketContents} setSelectedAsset={setSelectedAssetM} />}
+        {<FaucetContents Faucet={Faucet} marketContents={cMarketContents} setSelectedAsset={setSelectedAssetM} addToWallet={addToWallet}/>}
       </div>
     </div>
   );
