@@ -135,7 +135,7 @@ export const MarketDataProvider = ({ children }) => {
   }, []);
 
   const coinNameToColor = (coinName) => {
-    console.log(coinName);
+    // console.log(coinName);
     for (const item of marketContentsTemplate) {
       if (item.coinName.toLowerCase() === coinName.toLowerCase()) {
         return item.topBg;

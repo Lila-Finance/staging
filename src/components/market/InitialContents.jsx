@@ -22,7 +22,7 @@ const InitialContents = ({ setSelectedAsset, selectedAsset }) => {
                   >
                     <p
                       className={`text-xl xl:text-[25px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                       }`}
                     >
                       {coinName}
@@ -30,7 +30,7 @@ const InitialContents = ({ setSelectedAsset, selectedAsset }) => {
 
                     <p
                       className={`text-sm md:text-base xl:text-[17px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                       }`}
                     >
                       {wallet}

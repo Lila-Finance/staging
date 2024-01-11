@@ -8,6 +8,8 @@ const MaturedPosition = ({expiredPositions, connected}) => {
 
   const [activePostions, setActivePostions] = useState([]);
 
+  const [hiddenMore, setHiddenMore] = useState(true);
+
   const toBigIntString = (value) => {
     let strValue = value.toString();
     strValue = strValue.padStart(11, '0')
@@ -36,7 +38,7 @@ const MaturedPosition = ({expiredPositions, connected}) => {
         title: asset,
         deposit: toBigIntString(pos.amount),
         parcent: `${rate}%`,
-        month: toBigIntString(interest),
+        earned: toBigIntString(interest),
         coinName: "AAVE V3",
         timeline: `${duration*10} Minute`,
         expire: formattedDate,
@@ -48,7 +50,7 @@ const MaturedPosition = ({expiredPositions, connected}) => {
 
 
   useEffect(() => {
-    setPositions(expiredPositions);
+    setPositions(expiredPositions.reverse());
   }, [expiredPositions]);
   
   
@@ -101,7 +103,7 @@ const MaturedPosition = ({expiredPositions, connected}) => {
       {/* Cards */}
       <div className="mt-4">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {activePostions.map((item) => {
+          {activePostions.map((item, indx) => {
             const {
               coinName,
               deposit,
@@ -114,13 +116,17 @@ const MaturedPosition = ({expiredPositions, connected}) => {
               topBg,
             } = item;
 
+            if(hiddenMore && indx > 2){
+              return ;
+            }
+
             return (
               <div
                 style={{
                   backgroundColor: `${topBg}`,
                 }}
                 className="w-full relative select-none"
-                key={id}
+                key={indx}
               >
                 {/* Top Part */}
                 <div className="w-full px-4 pt-5 pb-2.5">
@@ -169,11 +175,16 @@ const MaturedPosition = ({expiredPositions, connected}) => {
           })}
 
           <div className="flex items-center justify-center">
-            {/* <Link to="/">
-              <div className="bg-[#FF1E1E] w-[100px] h-[100px] flex items-center justify-center">
+            {hiddenMore &&
+              <div className="bg-[#FF1E1E] w-[100px] h-[100px] flex items-center justify-center hover:cursor-pointer" onClick={() => setHiddenMore(false)}>
                 <p className="text-white">View more</p>
               </div>
-            </Link> */}
+            }
+            {!hiddenMore &&
+              <div className="bg-[#FF1E1E] w-[100px] h-[100px] flex items-center justify-center hover:cursor-pointer" onClick={() => setHiddenMore(true)}>
+                <p className="text-white">Hide</p>
+              </div>
+            }
           </div>
         </div>
       </div>

@@ -14,57 +14,15 @@ import address from "../data/address.json";
 
 const Portfolio = () => {
 
-  const { publicClient, to10DecUSD, userAddress, toTokenFromAddress } = useContext(ExchangeRateContext);
+  const { publicClient, to10DecUSD, to10Dec, userAddress, toTokenFromAddress } = useContext(ExchangeRateContext);
 
   const [activePositions, setActivePositions] = useState([]);
   const [expiredPositions, setExpiredPositions] = useState([]);
   const [connected, setConnected] = useState(false);
 
 
-  // const DepositToPosition = async (deposit, deposits) => {
-  //     let new_deposit = deposits[deposit];
-      
-  //     const pooldata = (await client.query({ query: gql(PoolQuery(new_deposit['poolId']))}))['data'];
-  //     const value = BigInt(new_deposit['amount']);
-  //     const token = address['asset_addresses'][new_deposit['asset'].toLowerCase()];
-
-  //     const pool = pooldata['poolUpdateds'][0];
-  //     const strategy = pool['strategy'].toString();
-  //     const duration = Number(pool['duration'])
-  //     const rateIndex = Number(pool['rateIndex'])
-      
-  //     const key = (await publicClient.readContract({
-  //       address: address.core.oracle_address,
-  //       abi: ILilaOracle.abi,
-  //       functionName: "getKey",
-  //       args: [strategy, duration, rateIndex],
-  //     }));
-
-  //     const numerator = (await publicClient.readContract({
-  //       address: address.core.oracle_address,
-  //       abi: ILilaOracle.abi,
-  //       functionName: "getNumerator",
-  //       args: [key],
-  //     }));
-
-  //     const rewardsdata = (await client.query({ query: gql(RewardQuery(new_deposit['tokenID']))}))['data'];
-      
-  //     new_deposit = {
-  //       ...new_deposit,
-  //       amount: await to10DecUSD(value, token),
-  //       rate: Number(numerator)/100000,
-  //       strategy: pool['strategy'],
-  //       frequency: pool['frequency'],
-  //       duration: pool['duration'],
-  //       rewardsData: rewardsdata['rewardClaimeds'],
-  //     }
-  //     console.log(new_deposit)
-  //     return new_deposit;
-  // }
-
   const DataToPositions = async (user_address) => {
 
-    // const deposits = data['data']['deposits'];
     let active_positions = [];
     let expired_positions = [];
     
@@ -79,7 +37,7 @@ const Portfolio = () => {
 
     let list = Array.from({ length: count }, (_, i) => i);
 
-    // Create an array of promises
+    // Create an array of promises turning indexs to positions
     const promises = Object.keys(list).map(async (index) => {
       
       const tokenID = (await publicClient.readContract({
@@ -102,6 +60,7 @@ const Portfolio = () => {
         functionName: "poolList",
         args: [Position['poolId']],
       }));
+
       const Pool ={
         maxAmount: Pool_[0],
         strategy: Pool_[1],
@@ -124,7 +83,8 @@ const Portfolio = () => {
         functionName: "getNumerator",
         args: [rateKey],
       }));
-      const amount = await to10DecUSD(Position.amount, toTokenFromAddress(Pool.asset));
+      const amountUSD = await to10DecUSD(Position.amount, toTokenFromAddress(Pool.asset));
+      const amount = await to10Dec(Position.amount, toTokenFromAddress(Pool.asset));
 
       const matured_ = Position['claimedPayments'] ==  Pool['totalPayments'];
       
@@ -132,6 +92,7 @@ const Portfolio = () => {
         pool: Pool, 
         rate: rate, 
         amount: amount, 
+        amountUSD: amountUSD,
         matured: matured_,
         tokenID: tokenID
       }

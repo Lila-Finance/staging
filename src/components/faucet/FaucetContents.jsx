@@ -20,7 +20,7 @@ const FaucetContents = ({ Faucet, setSelectedAsset, marketContents }) => {
                 >
                   <p
                     className={`text-xl xl:text-[25px] ${
-                      id === 3 || id === 7 ? "text-black" : "text-white"
+                      id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                   >
                     {coinName}
@@ -28,7 +28,7 @@ const FaucetContents = ({ Faucet, setSelectedAsset, marketContents }) => {
 
                   <p
                     className={`text-sm md:text-base xl:text-[17px] ${
-                      id === 3 || id === 7 ? "text-black" : "text-white"
+                      id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                   >
                     {"Testnet Token"}

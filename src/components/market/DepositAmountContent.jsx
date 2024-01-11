@@ -55,7 +55,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, 
         
         return (
           <div className="grid md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
-            <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]" onClick={() => setSelectedAsset(-1)} key={0}>
+            <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]"  key={0}>
                 {/* top content */}
                 <div
                     style={{backgroundColor: `${topBg}`}}
@@ -63,7 +63,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, 
                 >
                     <p
                     className={`text-xl xl:text-[25px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                     >
                     {coinName}
@@ -71,7 +71,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, 
 
                     <p
                     className={`text-sm md:text-base xl:text-[17px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                     >
                     {rates[rate]}%
@@ -83,8 +83,8 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, 
                     {/* name */}
                     <p className="text-lg xl:text-xl text-white">{bottomCoin}</p>
                     {/* value */}
-                    <p className="text-sm xl:text-[15px] text-white pt-1.5 roboto">
-                    {value}
+                    <p className="text-sm xl:text-[15px] text-white pt-1.5">
+                    {(x => 5 * x * x + 15 * x + 10)(rate)} Minutes
                     </p>
                 </div>
             </div>
@@ -102,7 +102,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, 
                     {/* name */}
                     <p
                     className={`text-xl xl:text-[25px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                     >
                     {"Balance"}
@@ -111,7 +111,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, 
                     {/* value */}
                     <p
                     className={`text-sm md:text-base xl:text-[17px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                     >
                     {toBalanceString(balance)}
@@ -129,7 +129,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, 
                     {/* name */}
                     <p
                     className={`text-xl xl:text-[25px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                     >
                     {"Enter Amount"}
@@ -138,7 +138,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, 
                     {/* value */}
                     <p
                     className={`text-sm md:text-base xl:text-[17px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                     >
                     </p>
@@ -151,7 +151,7 @@ const DepositAmountContent = ({ toggleDeposit, selectedAsset, setSelectedAsset, 
                             border: "none",
                             outline: 'none',
                             textAlign: 'right', // Right-align text
-                            color: id === 3 || id === 7 ? "black" : "white", // Set text color conditionally
+                            color: id === 1 || id === 3 ? "black" : "white", // Set text color conditionally
                         }}
                         onKeyDown={(e) => {
                             // Allow numeric values, a single decimal point, and backspace

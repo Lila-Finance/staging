@@ -38,7 +38,7 @@ const Faucet = () => {
 
   const Faucet = async (token) => {
       const amount = token=="wbtc" ? FivDecBigIntToFull(BigInt("50000"), token) : FivDecBigIntToFull(BigInt("100000000"), token)
-      console.log([address.assets[token], userAddress, amount]);
+      // console.log([address.assets[token], userAddress, amount]);
       setFaucetArgs([address.assets[token], userAddress, amount]);
   }
 

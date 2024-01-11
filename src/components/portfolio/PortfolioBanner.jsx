@@ -79,9 +79,9 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
       const end_time = Number(pos.pool.payoutFrequency*BigInt(pos.pool.totalPayments));
       time_since_start = Math.min(time_since_start, end_time)
       const rate = (BigInt(time_since_start.toFixed(0))*pos.rate/pos.pool.payoutFrequency);
-      const val = pos.amount * rate;
+      const val = pos.amountUSD * rate;
       const interest = val/BigInt(100000000000);
-      sumNetWorth += pos.amount + interest;
+      sumNetWorth += pos.amountUSD + interest;
       
     }
     setNetWorth(sumNetWorth);
@@ -100,7 +100,7 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
         continue;
       }
 
-      const interest = (pos.amount*pos.rate/BigInt(100000000000));
+      const interest = (pos.amountUSD*pos.rate/BigInt(100000000000));
       sumMonthlyYeild += interest;
     }
     setMonthlyYeild(sumMonthlyYeild);
@@ -155,13 +155,13 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
     for(let position in active){
       //TODO ADD ACTIVE INCOME
       const pos = active[position];
-      const interest_per_ten = pos.amount * pos.rate;
+      const interest_per_ten = pos.amountUSD * pos.rate;
       const amount = interest_per_ten*BigInt(pos.position.claimedPayments)/BigInt(100000000000);
       sumTotalEarnings+=amount;
     }
     for(let position in expired){
       const pos = expired[position];
-      const interest_per_ten = pos.amount * pos.rate;
+      const interest_per_ten = pos.amountUSD * pos.rate;
       const amount = interest_per_ten*BigInt(pos.pool.totalPayments)/BigInt(100000000000);
       sumTotalEarnings+=amount;
     }
@@ -184,9 +184,9 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
       
       if(BigInt(0) < payments_due){
         unclaimedTokenIDs.push(pos);
-        const interest_per_ten = pos.amount * pos.rate;
+        const interest_per_ten = pos.amountUSD * pos.rate;
         const amount = interest_per_ten*payments_due/BigInt(100000000000);
-        console.log(pos, amount, (date_now-start)/freq);
+        // console.log(pos, amount, (date_now-start)/freq);
         sumUnclaimedInterest += amount;
       }
     }
@@ -247,7 +247,7 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
       const payments_due = BigInt(payouts_passed) - pos.position.claimedPayments;
       
       if(BigInt(0) < payments_due){
-        const interest_per_ten = pos.amount * pos.rate;
+        const interest_per_ten = pos.amountUSD * pos.rate;
         const amount = interest_per_ten*payments_due/BigInt(100000000000);
         sumUnclaimedInterest += amount;
       }
@@ -258,8 +258,8 @@ const PortfolioBanner = ({ activePositions, expiredPositions, connected }) => {
   }, [unclaimedTokenIDs])
 
   const claimAll = () => {
-    console.log("Called Claim");
-    console.log(withdrawArgs);
+    // console.log("Called Claim");
+    // console.log(withdrawArgs);
     batchedWithdrawContract();
   }
 

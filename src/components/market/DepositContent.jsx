@@ -146,7 +146,7 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
 
   return (
     <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-5 items-end">
-      <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]" onClick={() => setSelectedAsset(-1)} key={0}>
+      <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]"  key={0}>
                 {/* top content */}
                 <div
                     style={{backgroundColor: `${topBg}`}}
@@ -154,7 +154,7 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
                 >
                     <p
                     className={`text-xl xl:text-[25px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                     >
                     {coinName}
@@ -162,14 +162,14 @@ const DepositContent = ({ selectedAsset, setSelectedAsset, deposit, setDeposit, 
 
                     <p
                     className={`text-sm md:text-base xl:text-[17px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                     >
                     {rates[month]}%
                     </p>
                     <p
                     className={`text-sm text-right md:text-base xl:text-[17px] ${
-                        id === 3 || id === 7 ? "text-black" : "text-white"
+                        id === 1 || id === 3 ? "text-black" : "text-white"
                     }`}
                     >
                     {convertBigInt(amount)}

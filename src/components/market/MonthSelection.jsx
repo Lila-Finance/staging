@@ -43,7 +43,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
             >
               <p
                 className={`text-xl xl:text-[25px] ${
-                  id === 3 || id === 7 ? "text-black" : "text-white"
+                  id === 1 || id === 3 ? "text-black" : "text-white"
                 }`}
               >
                 {coinName}
@@ -51,7 +51,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
 
               <p
                 className={`text-sm md:text-base xl:text-[17px] ${
-                  id === 3 || id === 7 ? "text-black" : "text-white"
+                  id === 1 || id === 3 ? "text-black" : "text-white"
                 }`}
               >
                 {wallet}
@@ -90,7 +90,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
       }
       { !isAnimationDone &&
     <div className="grid md:grid-cols-4 lg:grid-cols-5 gap-5 items-end">
-      <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]" onClick={() => setSelectedAsset(-1)} key={10}>
+      <div className="w-full cursor-pointer w-full min-h-[192px] min-w-[233.59px]"  key={10}>
           {/* top content */}
           <div
             style={{backgroundColor: `${topBg}`}}
@@ -98,7 +98,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
           >
             <p
               className={`text-xl xl:text-[25px] ${
-                id === 3 || id === 7 ? "text-black" : "text-white"
+                id === 1 || id === 3 ? "text-black" : "text-white"
               }`}
             >
               {coinName}
@@ -106,7 +106,7 @@ const MonthSelection = ({ toggleDeposit, selectedAsset, setSelectedAsset }) => {
 
             <p
               className={`text-sm md:text-base xl:text-[17px] ${
-                id === 3 || id === 7 ? "text-black" : "text-white"
+                id === 1 || id === 3 ? "text-black" : "text-white"
               }`}
             >
               {wallet}
